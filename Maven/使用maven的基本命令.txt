@@ -1,0 +1,5 @@
+mvn archetype:generate -DgroupId=voidx -DartifactId=HelloWorld -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+mvn compile 
+
+在已有的java模板工程pom文件中直接添加dependency就行了，然後直接mvn compile 編譯就直接將相應的jar包下載到了本地庫中。

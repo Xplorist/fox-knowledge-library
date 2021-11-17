@@ -1,0 +1,19 @@
+# MyBatisConfig
+
+> MyBatisConfig.xml
+
+```
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 打印SQL语句到控制台 -->
+        <!-- <setting name="logImpl" value="STDOUT_LOGGING" /> -->
+
+        <!-- insert/update時值為空的數據類型設置 -->
+        <setting name="jdbcTypeForNull" value="NULL"/>
+    </settings>
+</configuration>
+
+```

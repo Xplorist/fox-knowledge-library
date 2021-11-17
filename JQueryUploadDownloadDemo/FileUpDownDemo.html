@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文件上傳下載demo</title>
+<link rel="stylesheet" href="../../example/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" href="../../css/applicationform.css" />
+<link rel="stylesheet" href="../../css/generalStyle.css" />
+<link rel="stylesheet" href="../../css/searchStyle.css" />
+<link rel="stylesheet" href="../../css/table.css" />
+<link rel="stylesheet" href="../../css/measureCss/testOperate.css" />
+<link rel="stylesheet" href="../../js/iqc/select/bootstrap.min.css">
+<script src="../../js/jquery-1.12.1.js"></script>
+<script src="../../js/angular.js"></script>
+<script src="../../js/jsFile/bootstrap.min.js"></script>
+<script src="../../js/jsFile/My97DatePicker/WdatePicker.js"></script>
+<!-- <script src="../../JsCode/partsMeasureJsCode/partsApplicationform.js"></script> -->
+<script src="../../JsCode/partsMeasureJsCode/FileUpDownDemo.js"></script>
+<script src="../../js/jsFile/My97DatePicker/angular.datepicker.js"></script>
+<script type="text/javascript" src="../../js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="../../js/jquery.fileDownload.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myController">
+
+	<input type="button" value="上傳圖示" href="#table-modal2"
+								data-toggle="modal" ng-click="btnUpClick('1')" /> 
+								
+	<div>
+		<a ng-click="downfile(file_save_name)">下載{{file_origin_name}}</a><br>
+		<a ng-click="delFile(file_save_name, file_save_path)">刪除{{file_origin_name}}</a>
+	</div>
+								
+	<div class="modal fade" id="table-modal2" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true"
+			style="overflow: hidden;">
+			<div class="modal-dialog" style="width: 600px; margin: 0 auto;">
+				<div class="modal-content modal-table">
+					<div class="modal-header">
+						<button id="addbtn" type="button" class="close"
+							data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h5 class="modal-title" style="color: red;">上傳附件</h5>
+					</div>
+					<div class="modal-body">
+						<!-- name屬性非常重要，並且和id必須一樣 -->
+						<input type="file" multiple="multiple" id="file" name="file" style="float: left;" />
+					</div>
+					<div class="modal-footer">
+						<button class="button green" ng-click="btnPicUploadClick()"
+							 data-dismiss="modal" style="height: 24px; width: 50px">確認</button>
+						<button data-dismiss="modal" class="button green"
+							style="height: 24px; width: 50px">返 回</button>
+					</div>
+				</div>
+			</div>
+	</div>
+		
+		
+</body>
+</html>

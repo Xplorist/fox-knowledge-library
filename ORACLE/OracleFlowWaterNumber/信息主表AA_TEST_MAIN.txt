@@ -1,0 +1,7 @@
+信息主表AA_TEST_MAIN
+pkid          -- 主鍵id
+create_date   -- 創建時間
+project_name  -- 專案名稱
+factory_zone  -- 廠區編號
+bill_no       -- 單號（專案名稱+廠區編號+日期+流水碼）
+rpt_type_no   -- 報告編號

@@ -1,0 +1,17 @@
+vue中配置打包後的路徑
+
+參考網址：
+https://cli.vuejs.org/zh/config/#%E5%85%A8%E5%B1%80-cli-%E9%85%8D%E7%BD%AE
+
+
+創建vue.config.js
+
+vue.config.js內容如下：
+
+
+module.exports = {
+  // 部署应用包时的基本 URL
+  publicPath: process.env.NODE_ENV === 'production'
+  ? '/production-sub-path/'
+  : '/',
+};

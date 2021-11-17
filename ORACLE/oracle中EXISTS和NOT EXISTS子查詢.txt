@@ -1,0 +1,32 @@
+兩種情況：
+1.子查詢中的內表沒有和外表關聯
+SELECT column1 FROM t1 WHERE EXISTS (SELECT * FROM t2);
+如果t2表中有數據，子查詢結果為true，整個SQL語句返回t1表中的所有記錄
+如果t2表中沒有數據，子查詢結果為false，整個SQL語句返回為空
+---
+SELECT column1 FROM t1 WHERE NOT EXISTS (SELECT * FROM t2);
+如果t2表中有數據，子查詢結果為false，整個SQL語句返回為空
+如果t2表中沒有數據，子查詢結果為true，整個SQL語句返回t1表中的所有記錄
+
+2.子查詢中的內表和外表關聯
+SELECT DISTINCT store_type FROM stores
+  WHERE EXISTS (SELECT * FROM cities_stores
+                WHERE cities_stores.store_type = stores.store_type);
+相當于查詢
+SELECT DISTINCT store_type FROM stores 
+	WHERE stores.store_type in 
+	(SELECT a.store_type FROM stores a, cities_stores b
+		WHERE a.store_type = b.store_type);
+可以理解為查詢外表和內表的交集的值
+
+---
+SELECT DISTINCT store_type FROM stores
+  WHERE NOT EXISTS (SELECT * FROM cities_stores
+                    WHERE cities_stores.store_type = stores.store_type);
+相當于查詢
+SELECT DISTINCT store_type FROM store 
+	WHERE store.store_type not in 
+	(SELECT a.store_type FROM stores a, cities_stores b
+		WHERE a.store_type = b.store_type);
+可以理解為查詢外表對於內表的補集
+

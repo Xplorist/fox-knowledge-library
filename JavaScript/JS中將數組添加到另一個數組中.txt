@@ -1,0 +1,4 @@
+var firstArray = [1,2,3];
+var secondArray = [4,5,6];
+Array.prototype.push.apply(secondArray, firstArray);
+console.log(secondArray);// 把firstArray加到secondArray中

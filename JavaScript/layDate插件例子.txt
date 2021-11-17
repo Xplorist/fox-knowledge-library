@@ -1,0 +1,13 @@
+html:
+創建時間： <input type="text" placeholder="请选择日期" id="create_date">
+
+js:
+lay('#version').html('-v'+ laydate.v);
+laydate.render({
+  elem: '#create_date', 
+  format: 'yyyy/MM/dd',
+  range: true,
+  done: function(value, date, endDate){
+	  bodyx.params.create_date = value;
+  }
+});

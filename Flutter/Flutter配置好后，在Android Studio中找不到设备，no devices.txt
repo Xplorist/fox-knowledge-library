@@ -1,0 +1,13 @@
+Flutter配置好后，在AndroidStudio中找不到设备，no devices
+
+參考網址：
+https://juejin.im/post/5c0f2f71f265da616917147c
+
+粗体部分替换成自己的android sdk路径：
+flutter config --android-sdk /path/to/android/sdk
+粗体部分替换成自己的android studio文件夹路径（我的不用配置这个就成功了）：
+flutter config --android-studio-dir /path/to/android/studio
+
+自己在寝室的电脑上，这样配置了后，还是no devices
+自己无意间打开了AVD Manager， 打开了一个虚拟机，然后no devices 变成了打开的虚拟机，
+问题解决了。

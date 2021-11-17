@@ -1,0 +1,8 @@
+JavaScript:
+1.JavaScript對象轉JSON字符串：
+JSON.stringify(xxObject);
+-----------------------------------------------------------------------------------------
+Java:
+1.JSON字符串轉Java對象：
+import com.alibaba.fastjson.JSON;
+NewMouldMainBean bean = JSON.parseObject(mainInfo, NewMouldMainBean.class);// mainInfo為JSON格式的字符串

@@ -1,0 +1,327 @@
+create or replace procedure ERX_AU_FLOW(p_in_rpt_type_no        in varchar2, --報告類型編號（PD:產品評估報告，CS:耗材評估報告，SWR:SWR執行單）
+                                        p_in_opt_type           in varchar2, --操作類型（0：提交，1：通過，2：駁回）
+                                        p_in_main_pkid          in varchar2, --主表pkid
+                                        p_in_path_pkid          in varchar2, --審核路徑id
+                                        p_in_opt_emp_no         in varchar2, --操作人工號
+                                        p_in_rej_memo           in varchar2, --駁回備註，非駁回操作時為空
+                                        p_out_next_au_path_pkid out varchar2, -- 下一審核路徑pkid
+                                        p_out_next_au_type_no   out varchar2, --下一審核類型編號
+                                        p_out_next_au_type_name out varchar2, --下一審核類型名稱
+                                        p_out_next_au_emp_no    out varchar2, --下一審核人工號
+                                        p_out_next_au_emp_name  out varchar2, --下一審核人姓名                                        
+                                        p_out_result_flag       out varchar2, --結果標誌（-1；失敗，0:提交成功，1:通過成功，2:駁回成功，3:通過成功，審核完成）
+                                        p_out_result_text       out varchar2 --結果文本說明
+                                        ) is
+  --臨時變量(temporary)
+  t_sqlcode             varchar2(1000); --異常SQL語句 
+  t_count               number; --計數器
+  t_next_path_exist     varchar2(1); --下一審核路徑是否存在標誌（Y:存在，N:不存在）
+  t_next_path_pkid      varchar2(50); --下一審核路徑pkid
+  t_now_path_au_type_no varchar2(50); --當前審核路徑審核類型編號
+  t_now_path_emp_no     varchar2(50); --當前審核路徑人員工號
+  t_now_path_emp_name   varchar2(50); --當前審核路徑人員姓名
+
+begin
+
+  --查詢當前審核路徑的信息
+  select t.au_type_no, t.emp_no, t.emp_name
+    into t_now_path_au_type_no, t_now_path_emp_no, t_now_path_emp_name
+    from ERX_AU_PATH t
+   where t.pkid = p_in_path_pkid;
+
+  --查詢當前審核路徑的是否存在下一審核路徑
+  select count(*)
+    into t_count
+    from ERX_AU_PATH t
+   where t.pkid = p_in_path_pkid
+     and t.next_path_id is not null;
+
+  if t_count > 0 then
+    t_next_path_exist := 'Y';
+    select t.next_path_id
+      into t_next_path_pkid
+      from ERX_AU_PATH t
+     where t.pkid = p_in_path_pkid;
+    select t.pkid, t.au_type_no, y.au_type_name, t.emp_no, t.emp_name
+      into p_out_next_au_path_pkid,
+           p_out_next_au_type_no,
+           p_out_next_au_type_name,
+           p_out_next_au_emp_no,
+           p_out_next_au_emp_name
+      from ERX_AU_PATH t, ERX_AU_TYPE y
+     where t.au_type_no = y.au_type_no
+       and t.pkid = t_next_path_pkid;
+  else
+    t_next_path_exist := 'N';
+  end if;
+
+  --判斷操作類型
+  /*==============================================================*/
+  /*  -- 提交                                                     */
+  /*==============================================================*/
+  case p_in_opt_type
+    when '0' then
+      --查詢該報告pkid的審核記錄中是否存在駁回
+      select count(*)
+        into t_count
+        from ERX_AU_RECORD t
+       where t.rpt_id = p_in_main_pkid
+         and t.opt_type = '2';
+    
+      if t_count <= 0 then
+        --首次提交
+        -- 更新主表狀態為審核中
+        case p_in_rpt_type_no
+          when 'PD' then
+            update ERX_PD_MAIN t
+               set t.au_status = '1'
+             where t.pkid = p_in_main_pkid;
+          when 'CS' then
+            update ERX_CS_MAIN t
+               set t.au_status = '1'
+             where t.pkid = p_in_main_pkid;
+          when 'SWR' then
+            update ERX_SWR_MAIN t
+               set t.au_status = '1'
+             where t.pkid = p_in_main_pkid;
+          else
+            p_out_result_flag := '-1';
+            p_out_result_text := '報告類型有誤！';
+            rollback;
+            return;
+        end case;
+      else
+        --駁回後提交      
+        --刪除待審核表中該路徑的數據
+        delete from ERX_AU_WAIT t
+         where t.rpt_id = p_in_main_pkid
+           and t.opt_type = '0';
+      
+        --查詢最後一次駁回記錄的審核路徑作為下一個審核路徑
+        --（此步驟非常重要,駁回後可能會修改駁回審核路徑的人員工號姓名，路徑id不會變，下一審核路徑必須從路徑表中去查）
+        select a.au_path_id
+          into t_next_path_pkid
+          from ERX_AU_RECORD a
+         where a.pkid = (select pkid
+                           from (select t.pkid
+                                   from ERX_AU_RECORD t
+                                  where t.rpt_id = p_in_main_pkid
+                                    and t.opt_type = '2'
+                                  order by t.create_date desc)
+                          where rownum = 1);
+      
+        select t.pkid, t.au_type_no, y.au_type_name, t.emp_no, t.emp_name
+          into p_out_next_au_path_pkid,
+               p_out_next_au_type_no,
+               p_out_next_au_type_name,
+               p_out_next_au_emp_no,
+               p_out_next_au_emp_name
+          from ERX_AU_PATH t, ERX_AU_TYPE y
+         where t.au_type_no = y.au_type_no
+           and t.pkid = t_next_path_pkid;
+      end if;
+    
+      -- 將當前路徑的提交數據保存到審核記錄表中
+      insert into ERX_AU_RECORD t
+        (t.rpt_type_no,
+         t.rpt_id,
+         t.au_path_id,
+         t.au_type_no,
+         t.emp_no,
+         t.emp_name,
+         t.opt_type,
+         t.rej_memo,
+         t.creator)
+      values
+        (p_in_rpt_type_no,
+         p_in_main_pkid,
+         p_in_path_pkid,
+         t_now_path_au_type_no,
+         t_now_path_emp_no,
+         t_now_path_emp_name,
+         '0',
+         '',
+         p_in_opt_emp_no);
+    
+      -- 將下一審核路徑的數據保存到待審核表中
+      insert into ERX_AU_WAIT t
+        (t.rpt_type_no,
+         t.rpt_id,
+         t.au_path_id,
+         t.au_type_no,
+         t.emp_no,
+         t.emp_name,
+         t.opt_type,
+         t.rej_memo,
+         t.creator)
+      values
+        (p_in_rpt_type_no,
+         p_in_main_pkid,
+         p_out_next_au_path_pkid,
+         p_out_next_au_type_no,
+         p_out_next_au_emp_no,
+         p_out_next_au_emp_name,
+         '1',
+         '',
+         p_in_opt_emp_no);
+    
+      p_out_result_flag := '0';
+      p_out_result_text := '提交成功';
+  /*==============================================================*/
+  /*  -- 通過                                                     */
+  /*==============================================================*/
+    when '1' then
+      --刪除待審核表中當前審核路徑的數據
+      delete from ERX_AU_WAIT t
+       where t.rpt_id = p_in_main_pkid
+         and t.opt_type = '1';
+      -- 將當前路徑的通過數據保存到審核記錄表中
+      insert into ERX_AU_RECORD t
+        (t.rpt_type_no,
+         t.rpt_id,
+         t.au_path_id,
+         t.au_type_no,
+         t.emp_no,
+         t.emp_name,
+         t.opt_type,
+         t.rej_memo,
+         t.creator)
+      values
+        (p_in_rpt_type_no,
+         p_in_main_pkid,
+         p_in_path_pkid,
+         t_now_path_au_type_no,
+         t_now_path_emp_no,
+         t_now_path_emp_name,
+         '1',
+         '',
+         p_in_opt_emp_no);
+    
+      if t_next_path_exist = 'Y' then
+        --存在下一審核路徑
+        --將下一審核路徑數據保存到待審核表中
+        insert into ERX_AU_WAIT t
+          (t.rpt_type_no,
+           t.rpt_id,
+           t.au_path_id,
+           t.au_type_no,
+           t.emp_no,
+           t.emp_name,
+           t.opt_type,
+           t.rej_memo,
+           t.creator)
+        values
+          (p_in_rpt_type_no,
+           p_in_main_pkid,
+           p_out_next_au_path_pkid,
+           p_out_next_au_type_no,
+           p_out_next_au_emp_no,
+           p_out_next_au_emp_name,
+           '1',
+           '',
+           p_in_opt_emp_no);
+      
+        p_out_result_flag := '1';
+        p_out_result_text := '通過成功';
+      else
+        -- 審核完成，不存在下一審核路徑
+        -- 更新主表狀態為審核完成
+        case p_in_rpt_type_no
+          when 'PD' then
+            update ERX_PD_MAIN t
+               set t.au_status = '2'
+             where t.pkid = p_in_main_pkid;
+          when 'CS' then
+            update ERX_CS_MAIN t
+               set t.au_status = '2'
+             where t.pkid = p_in_main_pkid;
+          when 'SWR' then
+            update ERX_SWR_MAIN t
+               set t.au_status = '2'
+             where t.pkid = p_in_main_pkid;
+          else
+            p_out_result_flag := '-1';
+            p_out_result_text := '報告類型有誤！';
+            rollback;
+            return;
+        end case;
+      
+        p_out_result_flag := '3';
+        p_out_result_text := '審核完成';
+      end if;
+    
+  /*==============================================================*/
+  /*  -- 駁回                                                     */
+  /*==============================================================*/
+    when '2' then
+      -- 刪除待審核表中當前審核路徑的數據
+      delete from ERX_AU_WAIT t
+       where t.rpt_id = p_in_main_pkid
+         and t.opt_type = '1';
+      -- 將當前路徑的駁回數據保存到審核記錄表中
+      insert into ERX_AU_RECORD t
+        (t.rpt_type_no,
+         t.rpt_id,
+         t.au_path_id,
+         t.au_type_no,
+         t.emp_no,
+         t.emp_name,
+         t.opt_type,
+         t.rej_memo,
+         t.creator)
+      values
+        (p_in_rpt_type_no,
+         p_in_main_pkid,
+         p_in_path_pkid,
+         t_now_path_au_type_no,
+         t_now_path_emp_no,
+         t_now_path_emp_name,
+         '2',
+         p_in_rej_memo,
+         p_in_opt_emp_no);
+      -- 查詢審核路徑中的提交人路徑為下一審核路徑
+      select t.pkid, t.au_type_no, y.au_type_name, t.emp_no, t.emp_name
+        into p_out_next_au_path_pkid,
+             p_out_next_au_type_no,
+             p_out_next_au_type_name,
+             p_out_next_au_emp_no,
+             p_out_next_au_emp_name
+        from ERX_AU_PATH t, ERX_AU_TYPE y
+       where t.au_type_no = y.au_type_no
+         and t.rpt_id = p_in_main_pkid
+         and t.list_order = 0;
+      -- 將下一審核人的數據添加到待審核表中
+      insert into ERX_AU_WAIT t
+        (t.rpt_type_no,
+         t.rpt_id,
+         t.au_path_id,
+         t.au_type_no,
+         t.emp_no,
+         t.emp_name,
+         t.opt_type,
+         t.rej_memo,
+         t.creator)
+      values
+        (p_in_rpt_type_no,
+         p_in_main_pkid,
+         p_out_next_au_path_pkid,
+         p_out_next_au_type_no,
+         p_out_next_au_emp_no,
+         p_out_next_au_emp_name,
+         '0',
+         p_in_rej_memo,
+         p_in_opt_emp_no);
+    
+      p_out_result_flag := '2';
+      p_out_result_text := '駁回成功';
+  end case;
+
+  commit;
+exception
+  when others then
+    rollback;
+    t_sqlcode         := sqlcode;
+    p_out_result_flag := '-1';
+    p_out_result_text := '存儲過程出錯異常：' || t_sqlcode || '|' || sqlerrm;
+  
+end ERX_AU_FLOW;

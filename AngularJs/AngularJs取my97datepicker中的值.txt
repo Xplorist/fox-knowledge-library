@@ -1,0 +1,4 @@
+angularjs中due_time的model得到my97datepiker的值，
+只需要在html中這樣寫添加onpicked: function(){$(this).trigger('change')}
+就ok了。
+<input type="text" class="Wdate" ng-model="due_time" onClick="WdatePicker({dateFmt:'yyyy/MM/dd',readOnly:true,onpicked: function(){$(this).trigger('change')}})"/>

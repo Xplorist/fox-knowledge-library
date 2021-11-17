@@ -1,0 +1,84 @@
+僅安裝了jdk1.8和Maven3.5.0
+
+java -version 查看jdk版本
+
+mvn -v 查看maven版本
+
+僅使用文本編輯器編輯代碼和cmd調用maven命令java命令
+-----------------------------------------------------------------------------------------------------------
+mvn spring-boot:run 通過maven調用spring-boot:run 命令運行spring-boot環境
+
+mvn package 使用maven對spring-boot項目進行打包
+
+jar tvf target/myproject-0.0.1-SNAPSHOT.jar 在spring-boot項目的根目錄下將maven打包的項目解壓出
+											myproject-0.0.1-SNAPSHOT.jar.original源包
+
+java -jar target/myproject-0.0.1-SNAPSHOT.jar 在spring-boot項目的根目錄下直接使用java -jar命令打開
+											  maven打包的spring-boot項目的獨立jar包
+											  
+-----------------------------------------------------------------------------------------------------------
+
+Spring-boot項目的pom.xml文件
+--- pom.xml ---
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>myproject</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- Inherit defaults from Spring Boot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.2.RELEASE</version>
+    </parent>
+
+    <!--  Add typical dependencies for a web application -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- Package as an executable jar -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+--- end of pom.xml ---
+
+-----------------------------------------------------------------------------------------------------------
+spring-boot項目的src/main/java/Example.java
+
+--- Example.java ---
+
+import org.springframework.boot.*;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@EnableAutoConfiguration
+public class Example {
+    @RequestMapping("/")
+    String home() {
+        return "Hello World!";
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(Example.class, args);
+    }
+}
+
+--- end of Example.java ---

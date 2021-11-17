@@ -1,0 +1,20 @@
+window.onload = function() {
+    var tableCont = document.querySelector('#filelist');
+    function scrollHandle(e) {
+        //console.log(this);
+        var scrollTop = this.scrollTop;
+        this.querySelector('thead').style.transform = 'translateY(' + scrollTop + 'px)';
+    }
+ 
+    tableCont.addEventListener('scroll', scrollHandle);
+}
+
+#filelist為包含table的div
+
+優點：
+簡單，不需要太多複雜的css，不要過多的js控制。
+
+缺陷：
+通過transform: translateY屬性去實現表頭固定，但是在滾動條動作之後會出現將
+表頭的格子邊框給隱藏。
+補充： 給table設置css border-collapse: separate;可以解決thead格子消失這個問題。

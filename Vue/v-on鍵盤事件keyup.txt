@@ -1,0 +1,36 @@
+html:
+<div id="addTreeNodeModal">
+	<input class="baseInfo" type="text" v-model="hh_pn" v-on:keyup="inputProcess('hh_pn')">
+</div>
+
+js:
+var addTreeNodeModal = new Vue({
+	el: '#addTreeNodeModal',
+	data: {
+		id: '',
+		pId: '',
+		name: '',
+		open: false,
+		item_no:'',
+		group_stage:'',
+		hh_pn:'',
+		hh_ver:'',
+		customer_pn:'',
+		customer_ver:'',
+		use_amount:'',
+		unit:'',
+		single_weight:'',
+		category:'',
+		name_en:'',
+		name_cn:'',
+		process_dri:'',
+		memo:'',
+		list_order: '',
+		operate_type: ''
+	},
+	methods: {
+		inputProcess: function(param) {
+			addTreeNodeModal[param] = addTreeNodeModal[param].replace(/[\r\n]/g,"");
+		}
+	}
+});

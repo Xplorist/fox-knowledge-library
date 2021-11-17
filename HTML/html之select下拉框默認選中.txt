@@ -1,0 +1,83 @@
+重點是select中的數據要加載完成，而且ng-model中的數據是select下拉列表中的相同數據
+如下示例：
+selectedProject的值和projectInformationList中的值相同。網頁上就能夠顯示出來，id相同，value就能夠被選中,
+id的值和類型都要相同。
+
+html：
+<th>
+	專案名稱
+	<select ng-change="findPhaseList()" ng-model="selectedProject"
+		ng-options="x.projectId as x.projectName for x in projectInformationList">
+	</select>
+</th>
+<th>
+	開發階段
+	<select  
+		ng-change="findProgramList()" ng-model="selectedPhase"
+		ng-options="x.id as x.name for x in phaseList">
+	</select>
+</th>
+
+js：
+var dto={
+		typeno:$scope.typeno,
+};
+//異步請求查詢條件中的所有專案
+$http({
+	method : 'POST',
+	headers : {
+		'Content-Type' : 'application/json'
+	},
+	url : 'file/fileManageTotalsAction!initALlProjectList.action',
+	data:{
+		fileNameListSearchDto:dto
+	}
+}).success(function(response) {
+	Array.prototype.push.apply($scope.projectInformationList,response.projectInformationList);
+	for(var i=0;i<response.showTypeList.length;i++){
+		if(response.showTypeList[i]==='查詢'){
+			$scope.selectType=true;
+		}
+		if(response.showTypeList[i]==='瀏覽'){
+			$scope.lookType=true;
+		}
+		if(response.showTypeList[i]==='上傳'){
+			$scope.uploadType=true;
+		}
+		if(response.showTypeList[i]==='下載'){
+			$scope.downType=true;
+		}
+	}
+	
+	$scope.selectedProject = parseInt($scope.projectId,10);
+	
+	if($scope.selectedProject!='all'){
+		$http({
+			method : 'POST',
+			headers : {
+				'Content-Type' : 'application/json'
+			},
+			url : 'file/fileManageTotalsAction!findPhaseListByProjectId.action',
+			data:{
+				projectId:$scope.selectedProject
+			}
+		}).success(function(response) {
+			Array.prototype.push.apply($scope.phaseList,response.phaseList);
+			for(var i = 0; i < $scope.phaseList.length; i++){
+				if($scope.phaseList[i].id == parseInt($scope.phaseId,10)){
+					$scope.selectedPhase = $scope.phaseList[i].id;
+					break;
+				}
+			}
+			//$scope.selectedPhase=$scope.phaseList[0].id;
+			$scope.selectedProcess=$scope.processDTOList[0].id;
+			$scope.selectedFactory=$scope.factoryList[0].id;
+			$scope.selectedFileName=$scope.fileNameList[0].id;
+			$scope.findFileList();
+		}).error(function() {
+			alert('查詢異常!');
+		});
+	}
+}).error(function() {
+	alert('查詢異常!');
+});

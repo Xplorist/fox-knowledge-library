@@ -1,0 +1,58 @@
+SpringBoot中MyBatis事務管理
+
+參考網址：
+https://blog.csdn.net/wohaqiyi/article/details/72895983
+https://blog.csdn.net/nextyu/article/details/78669997
+
+
+1.在SpringBoot啟動類上配置@EnableTransactionManagement
+
+例如：
+-------------------------------------------------------------------
+@SpringBootApplication
+@EnableTransactionManagement
+@MapperScan("com.foxconn.bidding.mapper")
+public class BiddingApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(BiddingApplication.class, args);
+    }
+
+}
+-------------------------------------------------------------------
+
+2.在service接口的實現類的方法上配置@Transactional
+
+例如：
+-------------------------------------------------------------------
+    @Override
+    @Transactional
+    public ResultParam addUser(USER_ACUNT_bean param) {
+        ResultParam result = ResultParam.of("1", "addUser is successful !");
+
+        String password = param.getPassword();
+        String encodePSW = SimpleEncodeUtil.encode(password);
+        param.setPassword(encodePSW);
+
+        String user_info_pkid = UUID_Util.getUUID32();
+        USER_INFO_bean user_info = param.getUser_info();
+        user_info.setPkid(user_info_pkid);
+
+        // 新增用戶信息
+        Integer addUserInfo_flag = mapper.addUserInfo(user_info);
+        if(addUserInfo_flag <= 0) {
+           result = ResultParam.of("0", "addUserInfo is failed !");
+            throw new RuntimeException("addUserInfo is failed !");
+        }
+
+        // 新增用戶
+        param.setUser_info_pkid(user_info_pkid);
+        Integer addUser_flag = mapper.addUser(param);
+        if(addUser_flag <= 0) {
+            result = ResultParam.of("0", "addUser is failed !");
+            throw new RuntimeException("addUser is failed !");
+        }
+
+        return result;
+    }
+-------------------------------------------------------------------

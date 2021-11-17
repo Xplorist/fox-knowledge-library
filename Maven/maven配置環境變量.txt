@@ -1,0 +1,6 @@
+M2_HOME  --  D:\apache-maven-3.5.0
+Path     --  %M2_HOME%\bin;
+MAVEN_OPTS  -- -Xms256m -Xmx512m (非必須)
+
+驗證命令：
+mvn -version

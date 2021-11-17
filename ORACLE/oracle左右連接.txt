@@ -1,0 +1,24 @@
+左右連接：
+
+左連接：左邊的表， 左邊的表全部顯示
+
+右連接：右邊的表，右邊的表全部顯示
+
+1. 内连接很简单 
+select A.*, B.* from A,B where A.id = B.id 
+select A.*, B.* from A inner join B on A.id = B.id 
+以上两句是完全等价的 
+
+2. 左外连接 
+select * from emp a left join dept d on a.deptno=d.deptno 
+select * from emp a,dept d where a.deptno=d.deptno(+) 
+
+以上两句是完全等价的 
+
+3. 右外连接 
+select * from emp a right join dept d on a.deptno=d.deptno 
+select * from emp a,dept d where a.deptno(+)=d.deptno 
+以上两句是完全等价的 
+
+也就是说只要把语句中的表换个位置，右外和左外就可以起到同样的功能 
+(+)所在的字段可以為空。

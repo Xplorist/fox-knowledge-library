@@ -1,0 +1,24 @@
+MyBatis中Oracle執行多條SQL語句
+
+參考網址：
+https://my.oschina.net/gynwnlau/blog/828550
+
+版本：mybatis-3.4.1，spring-4.3.3
+
+数据库：oracle
+
+现在mybatis的一个<update>中执行多条update语句，
+通过修改数据库连接参数加上allowMultiQueries=true实现，
+適用於MySQL，不適用Oracle！
+
+【MyBatis中Oracle執行多條SQL語句的解决方案】
+
+在sql中添加BEGIN  END，成功执行！
+
+<update id="changeChannel">
+    BEGIN
+        update1 ......;
+        update2 ......;
+        update3 ......;
+    END;
+</update>

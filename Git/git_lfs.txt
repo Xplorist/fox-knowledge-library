@@ -1,0 +1,19 @@
+1.git init
+2.git lfs install
+3.git lfs track "*.7z"
+4.git add .gitattributes
+5.git add file.7z
+6.git commit -m "add large .7z file"
+7.git remote add origin git@github.com:Xplorist/develop_tools.git
+8.git push -u origin master
+
+--使用ssh上傳大文件會出現連接中斷的問題，所以改用https來push上傳
+1.git init
+2.git lfs install
+3.git lfs track "*.7z"
+4.git lfs track
+5.git add .gitattributes
+6.git add file.7z
+7.git commit -m "add large .7z file"
+8.git remote add origin https://github.com/Xplorist/develop_crack_tools.git
+9.git push -u origin master

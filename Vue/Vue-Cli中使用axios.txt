@@ -1,0 +1,13 @@
+Vue-Cli中使用axios
+
+参考网址：
+https://segmentfault.com/a/1190000014703735
+
+
+直接把axios挂载到vue构造函数的prototype属性上，组件中通过this.axios来拿到axios
+
+// main.js
+import Vue from 'vue'
+import axios from 'axios'
+
+Vue.prototype.axios = axios

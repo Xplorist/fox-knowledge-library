@@ -1,0 +1,7 @@
+public class UUID_Util {
+	public static String getUUID32(){
+		String result = UUID.randomUUID().toString().replace("-", "").toUpperCase();
+		
+		return result;
+	}
+}

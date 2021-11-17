@@ -1,0 +1,11 @@
+<!-- 查詢所有專案list,根據條件 -->
+<select id="queryAllProjectListx" parameterType="Map"  resultType="com.project.projectSelect.model.ProjectBean">
+	select t.* from PROJECT t where 1=1
+	<if test="projectName != null and projectName != ''">
+		<bind name="p_name" value="'%' + projectName + '%'"/>
+		and t.name like #{p_name}
+	</if> 
+	<if test="createYear != null and createYear != ''">
+		and t.createyear = #{createYear}
+	</if>
+</select>

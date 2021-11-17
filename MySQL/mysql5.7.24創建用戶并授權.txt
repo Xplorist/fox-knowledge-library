@@ -1,0 +1,35 @@
+1、root用户登录
+
+2、创建一个用户：
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+
+如果想任何计算机都可以访问，需要将localhost更改为% 即可
+
+CREATE USER 'username'@'%' IDENTIFIED BY 'password';
+CREATE USER 'voidx'@'%' IDENTIFIED BY 'voidx';
+
+3、授权：GRANT privileges ON database_name.table_name TO 'username'@'localhost';
+
+如果是所有权限，可以将privileges改成all
+
+如果需要对所有的数据库&所有的表生效，需要将database_name.table_name更改为*.* 即可
+
+localhost同创建用户，如果对所有远程计算机生效，改成%
+
+GRANT all ON *.* TO 'username'@'%';
+GRANT all ON *.* TO 'voidx'@'%';
+
+因为当前有很多数据库工具和链接包都不支持“caching_sha2_password”，为了方便，
+暂时还是改回了“mysql_native_password”认证插件。
+ALTER USER 'voidx'@'%' IDENTIFIED WITH mysql_native_password BY 'Pi=3.1415926';
+
+4、补充：
+
+4.1、查看用户授权：
+show grants for username@host_address;
+
+4.2、某一权限说明
+
+GRANT USAGE:mysql 
+
+usage权限就是空权限，默认create user的权限，只能连库，啥也不能干

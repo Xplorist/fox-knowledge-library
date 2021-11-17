@@ -1,0 +1,25 @@
+<!-- 查詢新模治具list -->
+<select id="queryNewMouldList" parameterType="com.project.new_mould_draw.model.NewMouldMainBean" 
+	resultType="com.project.new_mould_draw.model.NewMouldMainBean">
+	select t.* FROM MD_NEW_MOULD_MAIN t
+	 where t.is_latest = 'Y'
+	   and t.is_valid = 'Y'
+	   <if test="project_id != null and project_id != ''">
+	   and t.project_id = #{project_id}
+	   </if>
+	   <if test="phase_id != null and phase_id != ''">
+	   and t.phase_id = #{phase_id}
+	   </if>
+	   <if test="part_id != null and part_id != ''">
+	   and t.part_id = #{part_id}
+	   </if>
+	   <if test="customer_part_no != null and customer_part_no != ''">
+	   and t.customer_part_no = #{customer_part_no}
+	   </if>
+	   <if test="process != null and process != ''">
+	   and t.process = #{process}
+	   </if>
+	   <if test="file_type != null and file_type != ''">
+	   and t.file_type = #{file_type}
+	   </if>
+</select>

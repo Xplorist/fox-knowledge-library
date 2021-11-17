@@ -1,0 +1,3 @@
+<button class="btn btn-danger" ng-hide="!uploadAuthority" ng-click="addClick()">
+	<i class="icon-upload icon-large"></i>新增治具
+</button>

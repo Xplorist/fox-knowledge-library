@@ -1,0 +1,15 @@
+參考鏈接：
+https://www.jetbrains.com/help/idea/spring-boot.html
+
+1.第一次使用，先創建一個空項目進入完整界面。
+2.公司內網需要設置代理，首先第一步是設置代理。
+	File =》 settings =》System Settings =》 HTTP Proxy => Manual proxy configuration
+3.設置Maven配置為自己自定義設置的Maven配置
+	File =》 settings =》Build,..... => Build Tools => Maven
+4.設置編輯區字體外觀
+	File =》 settings =》Editor => Font ,選source code pro 或者 DailogInput 或者 Consolas 或者 Courier New
+5.通過Spring Initializr創建SpringBoot項目
+	File => Project -> Spring Initializr 
+6.創建一個starter app 
+		參考網址：
+		https://spring.io/guides/gs/rest-service/

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>tm.paginationDemo</title>
+	<!-- Bootstrap core CSS --><!-- 目前分頁只有bootstrap3css支持tm.pagination插件-->
+    <link rel="stylesheet" href="../css_lib/bootstrap.min.css">
+	<!-- tm.pagination CSS -->
+    <link rel="stylesheet" href="../css_lib/tm.pagination.css">
+    <!-- Custom styles for this template -->
+	<link rel="stylesheet" href="../css_code/tm_paginationDemo.css">
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+	<div>
+		<button ng-click="queryNames()">查詢名字</button>
+		<table>
+			<thead>
+				<tr>
+					<th>序號</th>
+					<th>名字</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="a in nameShowList">
+					<td>{{$index+1}}</td>
+					<td>{{a.name}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<tm-pagination conf="paginationConf"></tm-pagination>
+	
+	<!-- Bootstrap AngularJs jQuery tm.pagination core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="../js_lib/jquery.js"></script>
+	<script type="text/javascript" src="../js_lib/angular.min.js"></script>
+	<script type="text/javascript" src="../js_lib/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js_lib/tm.pagination.js"></script>
+	<!-- Icons -->
+	<script type="text/javascript" src="../js_lib/feather.min.js"></script>
+    <script>
+    	feather.replace()
+    </script>
+    <!-- Custom JavaScript for this template -->
+	<script type="text/javascript" src="../js_code/tm_paginationDemo.js"></script>
+</body>
+</html>

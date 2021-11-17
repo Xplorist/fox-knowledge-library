@@ -1,0 +1,1 @@
+如果MyBatis查詢結果為list，直接把resultType映射為結果bean類型就行了。

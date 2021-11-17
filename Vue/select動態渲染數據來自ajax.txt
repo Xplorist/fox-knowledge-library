@@ -1,0 +1,45 @@
+html:
+專案： <select v-model="params.project_id">
+		 <option>請選擇</option>
+		 <option v-for="a in project_list" v-bind:value="a.project_id">{{ a.project_name }}</option>
+	   </select>
+
+js:
+var bodyx = new Vue({
+	el: '#bodyx',
+	data: {
+		project_id: getUrlParam('projectId'),
+		project_name: getUrlParam('projectName'),
+		phase_id: getUrlParam('phaseId'),
+		phase_name: getUrlParam('phaseName'),
+		project_list: [],
+		phase_list: [],
+		params: {
+			project_id: '',
+			phase_id: '',
+			product_name: '',
+			hh_pn: '',
+			customer_pn: '',
+			create_date: ''
+		},
+		dataList: []
+	},
+	created: function() {
+		var _self = this;
+		axios({
+		  method: 'post',
+		  url: '/ePDMWeb/esop/queryProjectList.x',
+		  data: ''
+		}).then(function(response) {
+			var result = response.data;
+			Array.prototype.push.apply(_self.project_list, result);
+			_self.params.project_id = _self.project_id;
+		});	
+	}
+});
+
+關鍵點在於_self.params.project_id = _self.project_id;
+_self.params.project_id有值，頁面上才會渲染出option的列表
+
+總結：在用vue渲染select時，頁面上要顯示出option的列表，需要給select的model
+傳一個默認值。

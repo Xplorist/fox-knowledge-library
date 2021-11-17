@@ -1,0 +1,23 @@
+var random = Math.floor(Math.random() * 9);
+
+demo:
+function getRandomNum() {
+    var a = [];
+    var b = [];
+
+    for(var i = 0; i < 9; i++) {
+        a.push(i + 1);
+    }
+    
+    while(a.length > 0) {
+        var random = Math.floor(Math.random() * a.length);
+        b.push(a[random]);
+        a.splice(random, 1);
+    }
+
+    console.log(b);
+
+    return b;
+}
+
+getRandomNum();

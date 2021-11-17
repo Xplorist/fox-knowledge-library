@@ -1,0 +1,23 @@
+注意：position: sticky;在低版本瀏覽器中不支持，因為這是css3中還處於實驗階段的屬性
+反正chrome 49是不支持這個功能的，如果要使用簡單的表頭和列固定的話，請使用transform
+這個css3屬性，因為要配合js，內容就放在js的欄目中了。
+
+/* 表頭左上角固定位置 */
+.thead_top_left {
+	position: sticky;
+	top: 0;
+	left: 0;
+	z-index: 10;
+}
+
+/* 表頭行固定位置 */
+.thead_top {
+	position: sticky;
+	top: 0;
+}
+
+/* 表體左列固定位置 */
+.tbody_left {
+	position: sticky;
+	left: 0;
+}

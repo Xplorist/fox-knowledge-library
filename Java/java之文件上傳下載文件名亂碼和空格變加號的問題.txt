@@ -1,0 +1,3 @@
+解決文件下載后空格變加號的問題replace("+", "%20")
+fileName = URLEncoder.encode(name, "UTF-8").replace("+", "%20");
+

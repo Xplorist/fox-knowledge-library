@@ -1,0 +1,73 @@
+create or replace procedure AA_TEST_PCD(p_pkid         in varchar2,
+                                        p_rpt_type_no  in varchar2,
+                                        p_project_name in varchar2,
+                                        p_factory_zone in varchar2) is
+
+  v_count          number;
+  v_bill_no        varchar2(50);
+  v_water_code     varchar2(3);
+  v_bill_no_prefix varchar2(50);
+
+begin
+  -- 在存儲過程中無法使用這種查詢時表級鎖定，直接在aa_test_bill_no表中添加bill_no字段為唯一鍵，oracle在insert和update時遇到唯一鍵應該會自動加鎖
+  --select * from aa_test_bill_no for update;
+
+  select count(*)
+    into v_count
+    from aa_test_bill_no t
+   where t.rpt_type_no = p_rpt_type_no
+     and t.create_date = trunc(sysdate)
+     and t.project_name = p_project_name;
+
+  if v_count > 0 then
+    -- 使用for update 加where 條件對該行數據進行加鎖
+    select t.bill_no
+      into v_bill_no
+      from aa_test_bill_no t
+     where t.rpt_type_no = p_rpt_type_no
+       and t.create_date = trunc(sysdate)
+       and t.project_name = p_project_name;
+  
+    -- 截取流水號轉換成數字並加1再處理成'00x'格式
+    select lpad((to_number(substr(v_bill_no, -3, 3)) + 1), 3, '0')
+      into v_water_code
+      from dual;
+    -- 截取前綴
+    select substr(v_bill_no, 0, length(v_bill_no) - 3)
+      into v_bill_no_prefix
+      from dual;
+    -- 組裝前綴和流水號為單號
+    select v_bill_no_prefix || v_water_code into v_bill_no from dual;
+    -- 更新單號
+    update aa_test_bill_no
+       set bill_no = v_bill_no
+     where rpt_type_no = p_rpt_type_no
+       and create_date = trunc(sysdate)
+       and project_name = p_project_name;
+  
+    insert into AA_TEST_MAIN_BILL_NO_REL t
+      (t.main_pkid, t.bill_no)
+    values
+      (p_pkid, v_bill_no);
+  else
+    select p_project_name || p_factory_zone ||
+           to_char(trunc(sysdate), 'yyyymmdd') || '001'
+      into v_bill_no
+      from dual;
+    insert into aa_test_bill_no
+      (bill_no, rpt_type_no, project_name)
+    values
+      (v_bill_no, p_rpt_type_no, p_project_name);
+  
+    insert into AA_TEST_MAIN_BILL_NO_REL t
+      (t.main_pkid, t.bill_no)
+    values
+      (p_pkid, v_bill_no);
+  end if;
+
+  -- 在觸發器調用的存儲過程中，無法使用這種事務
+  --commit;
+  --exception
+  --  when others then
+  --    rollback;
+end AA_TEST_PCD;

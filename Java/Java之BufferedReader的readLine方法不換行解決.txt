@@ -1,0 +1,23 @@
+BufferedReader的readLine()在读取的时候“丢掉”了换行符，遇到换行符就返回，
+然后进行下一行的读取。
+
+解決辦法：
+在讀取後再加上"\r\n"
+
+示例：
+StringBuffer sb = new StringBuffer();
+try {
+	FileInputStream fis = new FileInputStream(new File(filePath));
+	InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+	BufferedReader br = new BufferedReader(isr);
+	String str = null;
+
+	while((str = br.readLine()) != null) {
+		sb.append(str);
+		sb.append("\r\n");// 關鍵代碼
+	}
+	br.close();
+} catch (IOException e) {
+	e.printStackTrace();
+}
+String content = sb.toString();

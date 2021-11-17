@@ -1,0 +1,8 @@
+ng-repeat:
+<select>
+<option ng-repeat="x in names">{{x}}</option>
+</select>
+
+ng-options
+<select ng-model="myColor" ng-options="color.shade as color.name for color in colors">
+</select>

@@ -1,0 +1,24 @@
+decode (expression, search_1, result_1)
+decode (expression, search_1, result_1, search_2, result_2)
+decode (expression, search_1, result_1, search_2, result_2, ...., search_n, result_n)
+
+實例：
+decode(subject, 'Chinese', 1, 'Math', 2, , 'English',3)
+解釋：
+subject 為'Chinese'時返回1，
+subject 為'Math'時返回2，
+ subject 為'English'時返回3
+
+--------------------------------------------------------------------------------
+
+decode (expression, search_1, result_1, default)
+decode (expression, search_1, result_1, search_2, result_2, default)
+decode (expression, search_1, result_1, search_2, result_2, ...., search_n, result_n, default)
+
+實例：
+decode(subject, 'Chinese',score,0) 
+解釋：
+subject 為'Chinese'時返回score的值，
+subject 不為'Chinese'時返回默認值0
+
+與上面的區別在於最後多了一個默認值

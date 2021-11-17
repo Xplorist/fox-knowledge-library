@@ -1,0 +1,41 @@
+reference web page link: https://www.tecmint.com/install-mysql-8-in-ubuntu/
+
+sudo apt-get update
+
+wget -c https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
+
+sudo dpkg -i mysql-apt-config_0.8.10-1_all.deb
+
+sudo apt update
+
+sudo apt-get install mysql-server
+
+sudo mysql_secure_installation
+
+sudo systemctl status mysql
+
+----------------------------
+sudo systemctl status mysql
+sudo systemctl enable mysql
+----------------------------
+
+sudo apt-get update
+
+sudo apt-get install mysql-workbench-community libmysqlclient18
+
+sudo mysql -u root -p
+
+--------------------------------------------------------
+show databases;
+
+CREATE USER 'voidx'@'%' IDENTIFIED BY 'Pi=3.1415926';
+
+GRANT all ON *.* TO 'voidx'@'%';
+
+show grants for 'voidx'@'%';
+
+ALTER USER 'voidx'@'%' IDENTIFIED WITH mysql_native_password BY 'Pi=3.1415926';
+
+FLUSH PRIVILEGES;
+
+exit

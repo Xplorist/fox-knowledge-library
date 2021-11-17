@@ -1,0 +1,28 @@
+表級觸發器：
+create or replace trigger AA_TEST_TRG
+  after insert on aa_test_main
+  for each row
+
+declare
+  -- local variables here
+begin
+  -- 調用存儲過程或者其他邏輯代碼
+  AA_TEST_PCD();
+end AA_TEST_TRG;
+
+------------------------------------------------------
+行級觸發器：
+create or replace trigger AA_TEST_TRG
+  after insert on aa_test_main
+  for each row
+
+declare
+  -- local variables here
+begin
+  AA_TEST_PCD(:new.pkid,
+              :new.rpt_type_no,
+              :new.project_name,
+              :new.factory_zone);
+end AA_TEST_TRG;
+
+行級觸發器和表級觸發器的定義差別在於for each row

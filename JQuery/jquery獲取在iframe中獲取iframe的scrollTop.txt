@@ -1,0 +1,6 @@
+js运行在iframe本身,父窗口在另一个域,所以我无法访问iframe的ID或任何类似的
+如何获取一个iframe的scrollTop
+
+可以尝试这样做
+$("html,body").scrollTop();
+因为不同的浏览器将scrollTop设置在不同的元素(body或html)上.

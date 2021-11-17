@@ -1,0 +1,32 @@
+HTML:
+
+篩選:
+<input type="text" placeholder="工號/姓名" class="btn-xs" ng-model="selectm" ng-change="myFilter()">
+
+<div class="listbox">
+	<div ng-repeat="o in newemp" style="float: left">
+		<label style="padding: 0 4px; cursor: pointer"> 
+			<input class="c" type="checkbox" ng-checked="checkAll" ng-click="ckfn($event,o)">
+			{{o.empno + '(' + o.person_name + '-' + o.zone +')'}}
+		</label>
+	</div>
+</div>
+
+JS:
+
+$scope.myFilter = function () {
+	if ($scope.selectm==='') {
+		$scope.newemp = $scope.rmanlist;
+	}else {
+		$scope.newemp = [];
+		for (var i = 0; i < $scope.rmanlist.length; i++) {
+			var a = $scope.rmanlist[i].empno;
+			var b = $scope.rmanlist[i].person_name;
+			var c = $scope.rmanlist[i].zone;
+			if (a.indexOf($scope.selectm) !== -1 || b.indexOf($scope.selectm) !== -1
+					|| c.indexOf($scope.selectm) != -1) {
+				$scope.newemp.push($scope.rmanlist[i]);
+			}
+		}
+	}
+};

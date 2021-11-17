@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <meta charset="utf-8">
+	<!-- css lib -->
+    <link rel="stylesheet" href="css_lib/bootstrap.min.css" /> 
+    <style>
+		table {
+		    border-collapse: collapse;
+		    border-spacing: 0;
+			empty-cells: show;
+		}
+		
+		.table-bordered-xbr td,th {
+			border: 1px solid #ddd !important;
+			padding: 2px 2px;
+			text-align: center;
+			vertical-align: middle !important;
+			height: 50px;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			font-size:13px;
+		}
+		
+       /* 表頭左上角固定位置 */
+		.thead_top_left {
+			background-color: #f8f0d0;
+		}
+
+		/* 表頭行固定位置 */
+		.thead_top {
+			background-color: #f8f0d0;
+		}
+
+		/* 表體左列固定位置 */
+		.tbody_left {
+			background-color: white;
+		}
+    </style>
+</head>
+ 
+<body>
+	<h1 style="text-align: center;">test</h1>
+<div id="table-cont" style="width: 90%; margin: 0px auto; height: 600px; border-bottom: 1px solid #c8e0e0; overflow: scroll;">
+    <table class="table table-bordered-xbr table-hover" style="margin: 0 auto; width: 100%; white-space: nowrap; border-collapse: separate; empty-cells: show;">
+         <tbody id="tb_body">
+        </tbody>
+		<thead>
+			<tr style="background-color:#f8f0d0;">
+				<th class="thead_top_left">委托编号</th>
+				<th>交易日</th>
+				<th>账户编号</th>
+				<th>账户名称</th>
+				<th>组合编号</th>
+				<th>组合名称</th>
+				<th>自定义订单编号</th>
+				<th>证券代码</th>
+				<th>证券名称</th>
+				<th>交易所</th>
+				<th>价格类型</th>
+				<th>委托价格</th>
+				<th>委托数量</th>
+				<th>委托金额</th>
+				<th>买卖方向</th>
+				<th>订单状态</th>
+				<th>组合开平标志</th>
+				<th>组合投机套保标志</th>
+				<th>备兑标志</th>
+				<th>报单类型</th>
+				<th>今成交数量</th>
+				<th>今成交金额</th>
+				<th>撤成\废单数量</th>
+				<th>剩余数量</th>
+				<th>订单总费用</th>
+				<th>报单日期</th>
+				<th>委托时间</th>
+				<th>最后修改时间</th>
+				<th>撤销时间</th>
+				<th>撤单编号</th>
+				<th>操作员编号</th>
+				<th>操作员名称</th>
+				<th>柜台委托编号</th>
+				<th>订单IP</th>
+				<th>订单MAC</th>
+				<th>订单硬盘序列号</th>
+				<th>订单机器码</th>
+				<th>订单操作系统</th>
+				<th>会话编号</th>
+				<th>前置编号</th>
+				<th>交易编码</th>
+				<th>席位号</th>
+				<th>营业部代码</th>
+				<th>有效期类型</th>
+				<th>成交量类型</th>
+				<th>最小成交量</th>
+				<th>触发条件</th>
+				<th>止损价</th>
+				<th>OR委托编号</th>
+				<th>状态信息</th>
+				<th>发起标志</th>
+				<th>预留字段1</th>
+				<th>预留字段2</th>
+				<th>撤单标志</th>
+				<th>备注</th>
+			</tr>
+        </thead>
+    </table>
+</div>
+<script type="text/javascript" src="js_lib/jquery-1.12.1.js"></script>
+<script>
+	$(document).ready(function() {
+	  var tr_str = '<tr>'+
+	    '<td class="tbody_left">委托编号</td>        '+
+		'<td>交易日</td>          '+
+		'<td>账户编号</td>        '+
+		'<td>账户名称</td>        '+
+		'<td>组合编号</td>        '+
+		'<td>组合名称</td>        '+
+		'<td>自定义订单编号</td>  '+
+		'<td>证券代码</td>        '+
+		'<td>证券名称</td>        '+
+		'<td>交易所</td>          '+
+		'<td>价格类型</td>        '+
+		'<td>委托价格</td>        '+
+		'<td>委托数量</td>        '+
+		'<td>委托金额</td>        '+
+		'<td>买卖方向</td>        '+
+		'<td>订单状态</td>        '+
+		'<td>组合开平标志</td>    '+
+		'<td>组合投机套保标志</td>'+
+		'<td>备兑标志</td>        '+
+		'<td>报单类型</td>        '+
+		'<td>今成交数量</td>      '+
+		'<td>今成交金额</td>      '+
+		'<td>撤成\废单数量</td>   '+
+		'<td>剩余数量</td>        '+
+		'<td>订单总费用</td>      '+
+		'<td>报单日期</td>        '+
+		'<td>委托时间</td>        '+
+		'<td>最后修改时间</td>    '+
+		'<td>撤销时间</td>        '+
+		'<td>撤单编号</td>        '+
+		'<td>操作员编号</td>      '+
+		'<td>操作员名称</td>      '+
+		'<td>柜台委托编号</td>    '+
+		'<td>订单IP</td>          '+
+		'<td>订单MAC</td>         '+
+		'<td>订单硬盘序列号</td>  '+
+		'<td>订单机器码</td>      '+
+		'<td>订单操作系统</td>    '+
+		'<td>会话编号</td>        '+
+		'<td>前置编号</td>        '+
+		'<td>交易编码</td>        '+
+		'<td>席位号</td>          '+
+		'<td>营业部代码</td>      '+
+		'<td>有效期类型</td>      '+
+		'<td>成交量类型</td>      '+
+		'<td>最小成交量</td>      '+
+		'<td>触发条件</td>        '+
+		'<td>止损价</td>          '+
+		'<td>OR委托编号</td>      '+
+		'<td>状态信息</td>        '+
+		'<td>发起标志</td>        '+
+		'<td>预留字段1</td>       '+
+		'<td>预留字段2</td>       '+
+		'<td>撤单标志</td>        '+
+		'<td>备注</td>            '+
+		'</tr>';
+		
+		for(var i = 0; i < 100; i++) {
+			$("#tb_body").append(tr_str);
+		}
+		
+		var tableCont = document.querySelector('#table-cont');
+		function scrollHandle (e) {
+		    var scrollTop = this.scrollTop;
+			var scrollLeft = this.scrollLeft;
+			this.querySelector('thead').style.transform = 'translateY(' + (scrollTop) + 'px)';
+			
+			var tbody_lefts = this.querySelectorAll('.tbody_left');
+			for(var i = 0; i < tbody_lefts.length; i++) {
+				tbody_lefts[i].style.transform = 'translateX(' + (scrollLeft) + 'px)';
+				var w_v = tbody_lefts[i];
+				w_v.style.width = (w_v.offsetWidth + 10) + 'px';
+			}
+			
+		    var thead_top_lefts = this.querySelectorAll('.thead_top_left');
+			for(var i = 0; i < thead_top_lefts.length; i++) {
+				thead_top_lefts[i].style.transform = 'translate(' + (scrollLeft) + 'px, 0px)';
+				var w_v = thead_top_lefts[i];
+				w_v.style.width = (w_v.offsetWidth + 10) + 'px';
+			}
+			
+		}
+		
+		tableCont.addEventListener('scroll',scrollHandle);
+	});
+</script>
+</body>
+</html>

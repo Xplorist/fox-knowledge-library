@@ -1,0 +1,1 @@
+<input type="text" placeholder="請輸入數字" onkeyup="value=value.replace(/[^\d]/g,'')" />

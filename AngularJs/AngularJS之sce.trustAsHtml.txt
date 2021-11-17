@@ -1,0 +1,4 @@
+for(var i = 0; i<$scope.menu.length;i++){
+	$scope.menu[i].name_2 = $scope.menu[i].name.replace(' ', '').replace('<br/>', '');
+	$scope.menu[i].name = $sce.trustAsHtml($scope.menu[i].name);			
+}

@@ -1,0 +1,15 @@
+var regExp = /^[A-Z]{1}[0-9]{7}$/g;// eg：C3005579
+var regExp_1 = /^[0-9]{5}$/g;// eg: 10747
+var reg_flag = regExp.test(emp_no);
+var reg_flag_1 = regExp_1.test(emp_no);
+if(!reg_flag && !reg_flag_1) {
+	alert("請輸入工號");
+	if(type == 'send_emp') {
+		$scope.query_send_emp_no = "";
+		$scope.query_send_emp_name = "";
+	} else if(type == 'receive_emp') {
+		$scope.query_receive_emp_no = "";
+		$scope.query_receive_emp_name = "";
+	}
+	return;
+}

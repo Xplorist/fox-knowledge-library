@@ -1,0 +1,3 @@
+<input class="c" type="checkbox" ng-checked="checkAll" name='auditMan' ng-click="multiCheck($event,x)">
+$scope.multiCheck=function(event,obj){
+			if (event.target.checked) {

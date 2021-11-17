@@ -1,0 +1,22 @@
+git多賬號配置
+
+1.公司內網中使用代理才能訪問GitHub，但同時又要訪問公司內網中的GitLab，
+  由於之前訪問GitHub設置的是全局的https的方式，所以訪問內網中的GitLab
+  只能夠使用SSH的方式去訪問了。
+2.配置git多賬號的具體步驟：
+  win7操作系統下：
+  找到/C/Users/mcebgadmin/.ssh/config  （config文件沒有後綴）
+
+------------------------------------------------------------------------
+/C/Users/mcebgadmin/.ssh/config 中的內容如下：
+
+# 配置 github.com
+Host github.com *.github.com
+ProxyCommand connect -H http://10.244.186.81:8088 %h %p   
+IdentityFile /C/Users/mcebgadmin/.ssh/id_rsa      
+User git
+
+# 配置 10.244.168.131(公司內網GitLab)
+Host 10.244.168.131   
+IdentityFile /C/Users/mcebgadmin/.ssh/gitlab_id_rsa      
+User git

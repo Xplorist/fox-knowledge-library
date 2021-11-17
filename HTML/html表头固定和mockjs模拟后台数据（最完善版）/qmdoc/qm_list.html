@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>qm_list</title>
+<!-- css library -->
+<!--
+<link rel="stylesheet" href="./lib/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="./lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="./lib/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./lib/xbr/xbr.css">
+-->
+<link rel="stylesheet" href="./lib/page/pages.css">
+<!-- custom css -->
+<link rel="stylesheet" href="./css/qm_list.css">
+</head>
+<body>
+<div id="app">
+	<!-- 标题 -->
+	<div id="title">
+		<h1 class="text-center">品管文件发行</h1>
+	</div>
+	<!-- 查询条件 -->
+	<div id="query_condition">
+		<h3>查询条件</h3>
+		<div id="query_content">
+			<div class="query_content_box">
+				<div>文件名：</div>
+				<div class="query_content_box_input">
+					<input />
+				</div>
+			</div>
+			<div class="query_content_box">
+				<div>
+					厂区：
+				</div>
+				<div class="query_content_box_input">
+					<input />
+				</div>
+			</div>
+			<div class="query_content_box">
+				<div>
+					专案：
+				</div>
+				<div class="query_content_box_input">
+					<input />
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 查询按钮 -->
+	<div id="query_condition_button">
+		<button>新增</button>
+		<button @click="query(1)">查询</button>
+	</div>
+	<!-- 查询结果 -->
+	<div id="query_result">
+		<h3>查询结果</h3>
+		<div id="table_cont">
+			<table class="table table-bordered">
+				<tbody>
+					<tr v-for="(x, index) in dataList">
+						<td class="tbody_left tbody_left_first_col">
+							<button>操作</button>
+						</td>
+						<td class="tbody_left">{{ index + 1 }}</td>
+						<td class="tbody_left">{{ x.file_origin_name }}</td>
+						<td>{{ x.factory }}</td>
+						<td>{{ x.project }}</td>
+						<td>{{ x.version }}</td>
+						<td>{{ x.memo }}</td>
+						<td>{{ x.creator }}</td>
+						<td>{{ x.create_date }}</td>
+						<td>{{ x.update_date }}</td>
+					</tr>
+				</tbody>
+				<thead>
+					<tr>
+						<th class="thead_top_left thead_top_left_first_col">操作</th>
+						<th class="thead_top_left">序号</th>
+						<th class="thead_top_left">文件名</th>
+						<th>厂区</th>
+						<th>专案</th>
+						<th>版本</th>
+						<th>备注</th>
+						<th>创建人</th>
+						<th>创建时间</th>
+						<th>修改时间</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+	<!-- 分页 -->
+	<div id="pages">
+		 <!-- 分页DOM -->
+		 <div id="pagination" class="pagination"></div>
+	</div>
+</div>
+</body>
+<!-- JS library -->
+<script type="text/javascript" src="./lib/jquery-1.12.4/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="./lib/axios-0.19.1-dist/axios.min.js"></script>
+<script type="text/javascript" src="./lib/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./lib/vue-2.6.11/vue.min.js"></script>
+<script type="text/javascript" src="./lib/mockjs/mock.js"></script>
+<script type="text/javascript" src="./lib/page/pages.js"></script>
+<!-- custom JS -->
+<script type="text/javascript" src="./js/qm_list.js"></script>
+<script type="text/javascript" src="./js/qm_list_$mock.js"></script>
+</html>

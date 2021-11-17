@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <title>分页</title>
+    <!-- 分页css -->
+    <link rel="stylesheet" href="pages.css">
+ 
+    <style type="text/css">
+        html,body,div {padding: 0;margin: 0;}
+        html {font-family: '微软雅黑', Arial, Verdana, arial, serif;}
+        #content div {padding: 10px;background: #f2f2f2;margin-bottom: 1px;}
+    </style>
+ 
+</head>
+ 
+<body>
+    <div id="content"></div>
+    <!-- 分页DOM -->
+    <div id="pagination" class="pagination"></div>
+ 
+    <!-- 引入分页js -->
+    <script src="pages.js"></script>
+    <!-- ajax函数,需要了解请点击这里:https://blog.csdn.net/u012780176/article/details/79278479 -->
+    <script src="ajax.js"></script>
+    <script>
+    window.onload = function() {
+        var url = 'https://cnodejs.org/api/v1/topics?limit=10&page=';
+        var content = document.getElementById('content');
+        var tmp = '';
+ 
+        // 进入页面初始化请求第一页数据
+        getData(1);
+ 
+        // 使用ajax函数请求数据并渲染到页面
+        function getData(pageIndex) {
+            content.innerHTML = '正在加载...';
+            ajax({
+                url: url + pageIndex,
+                type: "get",
+                dataType: "json",
+                success: function(data) {
+					myPagi.dataTotal = 50;
+					myPagi.pageAmount = 5;
+					myPagi.pageTotal = 10;
+                    var list = data.data;
+                    list.forEach(function(context) {
+                        tmp += '<div>' + context.title + '</div>';
+                    });
+                    content.innerHTML = tmp;
+                    tmp = '';
+                },
+                error: function(err) {
+                    alert('请求数据失败');
+                }
+            })
+        }
+ 
+        
+        // 實例化分页组件
+        var myPagi = new myPagination({
+            id: 'pagination',
+            curPage: 1, //初始页码
+            pageTotal: 50, //总页数
+            pageAmount: 10, //每页多少条
+            dataTotal: 500, //总共多少条数据
+            pageSize: 5, //可选,分页个数
+            showPageTotalFlag: true, //是否显示数据统计
+            showSkipInputFlag: true, //是否支持跳转
+            getPage: function(pageIndex) {
+				// 点击分页按钮请求数据
+                getData(pageIndex);
+            }
+        });
+		
+		/*
+		實際運用說明：
+			實際使用的時候，因為是用Ajax，數據可以不用本例子中的ajax的插件，
+			getData()函數的作用基本上就是為了渲染列表數據，在實際使用中，不會
+			使用本例子中的getData()函數。
+			在異步請求中，將pageIndex和pageAmount作為參數傳到後台，
+			後台返回dataTotal，pageTotal並把這兩個值賦給分頁配置對象myPagi的
+			相應屬性。
+			動態修改myPagi的屬性值，需要重新加載myPagi = new myPagination(...)函數
+			的方式去修改。
+		*/
+		 
+    }
+    </script>
+</body>
+ 
+</html>

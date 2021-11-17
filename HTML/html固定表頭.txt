@@ -1,0 +1,67 @@
+html:
+
+<div id="tbDiv" style="max-height: 650px;position:relative;overflow-y: auto; ">
+	<!-- <table  class="table table-bordered table-hover"
+		style="background: #ffffff; width: 100%; z-index: 3; position: absolute;"> -->
+	<table id="copyHead" class="table table-bordered table-hover"
+		style="background: #ffffff; table-layout: fixed;width: 100%; z-index: 3; position: absolute;">
+		<tr>
+			<th style="width:100px;">序號</th>
+			<th>專案</th>
+			<th>階段</th>
+			<th>零件編號</th>
+			<th>零件名稱</th>
+			<th>客戶料號</th>
+			<th>文件編號</th>
+			<th>版本</th>
+			<th>鴻海料號</th>
+			<th>零件狀態</th>
+			<th>零件流程狀態</th>
+		</tr>
+	</table> 
+	<table id="tb" class="table table-bordered table-hover" 
+		style="table-layout: fixed; width: 100%; z-index: 2"><!--  -->
+		<tr><!-- ng-style="{minWidth:dataList.length=='0'?'none':'1000px'}" -->
+			<th style="width:100px;">序號</th>
+			<th>專案</th>
+			<th>階段</th>
+			<th>零件編號</th>
+			<th>零件名稱</th>
+			<th>客戶料號</th>
+			<th>文件編號</th>
+			<th>版本</th>
+			<th>鴻海料號</th>
+			<th>零件狀態</th>
+			<th>零件流程狀態</th>
+		</tr>
+		<tr ng-repeat="b in dataList">
+			<td style="width:100px;">{{$index+1}}</td>
+			<td title="{{b.projectname+'【'+b.projectcode+'】'}}">{{(b.projectname+'【'+b.projectcode+'】')}}</td>
+			<td title="{{b.phasename}}">{{b.phasename}}</td>
+			<td title="{{b.partcode}}">{{b.partcode}}</td>
+			<td title="{{b.partname}}">{{b.partname}}</td>
+			<td title="{{b.customno}}">{{b.customno}}</td>
+			<td title="{{b.documnetno}}">{{b.documnetno}}</td>
+			<td title="{{b.version}}">{{b.version}}</td>
+			<td title="{{b.hh_no}}">{{b.hh_no}}</td>
+			<td title="{{b.flag}}">{{b.flag}}</td>
+			<td title="{{b.flow_state}}">{{b.flow_state}}</td>
+		</tr>
+		<tr>
+			<td colspan="11"
+				ng-show="dataList.length==0"
+				style="text-align: center; color: red">暫無數據</td>
+		</tr>
+	</table>
+</div>
+
+js:
+//固定表頭滾動
+$scope.scrollfn = function() {
+	var box = document.getElementById('tbDiv');
+	var head = document.getElementById('copyHead');
+	box.onscroll = function() {
+		head.style.top = box.scrollTop + 'px';
+	}
+}
+$scope.scrollfn();

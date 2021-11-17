@@ -1,0 +1,11 @@
+偶尔会遇到这种情况：当首页文章很少，打开文章后BODY,HTML高度变化时，
+HTML网页的高度刚好够一个屏幕，但是又没有超出屏幕的边缘，
+这时候，如果一个元素多了1px，那么就会出现网页无缘无故的抖动，很是影响用户体验。
+
+主要原因还是滚动条显示/隐藏造成的。
+
+可以使用以下CSS代码解决
+
+html,body{ overflow-y:scroll;}
+html,body{ overflow:scroll; min-height:101%;}
+html{ overflow:-moz-scrollbars-vertical;}

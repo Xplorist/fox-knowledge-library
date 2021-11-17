@@ -1,0 +1,11 @@
+select RandomUUID() from dual
+
+java 源代碼：
+create or replace and compile java source named "RandomUUID" as
+public class RandomUUID
+{
+  public static String create()
+   {
+     return java.util.UUID.randomUUID().toString();
+   }
+}

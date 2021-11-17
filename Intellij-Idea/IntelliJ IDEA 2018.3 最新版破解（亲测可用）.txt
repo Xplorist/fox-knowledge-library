@@ -1,0 +1,11 @@
+參考鏈接：https://blog.csdn.net/fxbin123/article/details/84404582
+
+1、编辑C:\Windows\System32\drivers\etc下的hosts文件，加入以下配置
+
+0.0.0.0 account.jetbrains.com
+
+2、打开 http://idea.lanyus.com/
+
+3、输入获取到的注册码
+
+4、激活成功。。。

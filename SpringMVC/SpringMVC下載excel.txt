@@ -1,0 +1,38 @@
+html：
+<button onclick="exportExcelBackend()">表格導出excel</button>
+
+js：
+// 從後台導出excel
+function exportExcelBackend() {
+	window.location = '/ePDMWeb/ebom_excel/download.x?pkid=' + getUrlParam('pkid');
+}
+
+java：
+@Controller
+@RequestMapping("/ebom_excel")
+public class ExcelDownloadController {
+	@Resource
+	private EBOM_Service ebomService;
+	
+	@RequestMapping("/download.x")
+    public void downloadExcel(HttpServletRequest request, HttpServletResponse response) {
+		String pkid = request.getParameter("pkid");
+		
+        try {
+        	Map<String, Object> map = ebomService.generateExcel(pkid);
+        	HSSFWorkbook workbook = (HSSFWorkbook)map.get("workbook");
+        	String title = (String)map.get("title");
+        	
+        	response.setContentType("application/msexcel;charset=UTF-8");
+        	response.addHeader("Content-Disposition", "attachment; filename=" + new String((title + ".xls").getBytes("utf-8"), "ISO8859-1"));
+	    	OutputStream out = response.getOutputStream();  
+	    	
+	    	workbook.write(out);  
+	        out.flush();  
+	        out.close();  
+	        workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

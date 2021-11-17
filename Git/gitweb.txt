@@ -1,0 +1,5 @@
+參考網址鏈接：http://renxifeng.is-programmer.com/posts/45306.html
+
+lighttpd for windows 鏈接地址:
+1. http://lighttpd.dtech.hu/
+2. https://redmine.lighttpd.net/boards/2/topics/6066?r=6261#message-6261

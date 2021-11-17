@@ -1,0 +1,14 @@
+//結果去重
+for(int i = 0; i < list.size(); i++){
+	boolean flag = true;
+	for(int j = i + 1; j < list.size(); j++){
+		if(list.get(i).getId() == list.get(j).getId()){
+			flag = false;
+			break;
+		}
+	}
+	
+	if(flag){
+		result.add(list.get(i));
+	}
+}

@@ -1,0 +1,16 @@
+1.下載mingw并安裝，將其bin路徑添加到環境變量中，比如：D:\1ProgramInstall\MinGW\install\bin
+2.ctrl + R打開cmd.exe，輸入gcc測試是否生效
+3.在記事本中編輯helloWorld.c
+
+#include <stdio.h>
+
+int main() {
+    printf("hello world");
+
+    return 0;
+4.在helloWorld.c文件存在的文件夾中打開cmd.exe然後輸入gcc -o helloWorld helloWorld.c,
+  然後再輸入helloWorld，然後就會看到相應的輸出，
+  如果要編譯多個文件，需要將多個文件都加進來gcc -o main main.c test.c func.c
+  在链接命令中给出所依赖的库时，需要注意库之间的依赖顺序，依赖其他库的库一定要放到被依赖库的前面，
+  这样才能真正避免undefined reference的错误，完成编译链接
+  ps:在vscode中可以直接打開cmd.exe,快捷鍵是ctrl + shift + ~

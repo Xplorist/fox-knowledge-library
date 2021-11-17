@@ -1,0 +1,65 @@
+將一個多選框選中有兩種方式：
+1.使用jquery將相應元素選中，然後調用click();//這種方式是可以重複進行選中
+2.使用jquery將相應元素選中，然後調用attr("checked",true);//貌似這種選中只能夠生效一次
+不過attr("checked",false);和removeAttr("checked");卻是可以執行多次
+
+
+$("input[type='checkbox']").click();
+
+//多選框全選
+$("input[type='checkbox']").attr("checked",true);
+
+//多選框取消全選
+$("input[type='checkbox']").removeAttr("checked");
+
+用angularjs 進行數據的選中ng-model和ng-checked進行標籤的選中和取消，速度非常快而且可以重複進行，
+在全選的點擊事件中，設置全選為將集合中的數據全部添加，全選取消選中為將所有的數據清空。
+
+<input id="checkAll" type="checkbox" ng-checked="allChecked" ng-model="checkAll" ng-click="ckAllfn($event,o)">全選
+
+<div ng-repeat="o in newemp" style="float: left">
+	<label style="padding: 0 4px; cursor: pointer"> <input
+		class="c" type="checkbox" ng-checked="checkAll" ng-click="ckfn($event,o)">
+		{{o.empno+'('+o.person_name+')'}}
+	</label>
+</div>
+
+$scope.receier = [];
+$scope.ckfn = function (e, v) {
+	if (e.target.checked) {
+		var num = 0;
+		for (var i = 0; i < $scope.receier.length; i++) {
+			if ($scope.receier[i] === v) {
+				num++;
+				break;
+			}
+		}
+		if (num === 0) {
+			$scope.receier.push(v);
+		}
+		if( $scope.receier.length===$scope.newemp.length){
+			$("input[id='checkAll']").click();
+		}
+	}
+	else {
+		$("input[id='checkAll']").attr("checked",false);
+		for (var i = 0; i < $scope.receier.length; i++) {
+			if ($scope.receier[i] === v) {
+				$scope.receier.splice(i, 1);
+				break;
+			}
+		}
+	}
+};
+
+//全選
+$scope.ckAllfn = function (e, v) {
+	if (e.target.checked) {
+		$scope.receier=[];
+		Array.prototype.push.apply($scope.receier,$scope.newemp);
+	}
+	else {
+		$scope.receier=[];
+	}
+};
+

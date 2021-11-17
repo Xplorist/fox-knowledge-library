@@ -1,0 +1,121 @@
+参考网址：
+1.
+https://blog.csdn.net/weixin_42582102/article/details/86509941 
+这个貌似不行，无法解析php，但是能够访问静态页面内容
+
+2.
+https://www.jianshu.com/p/6ed8b1ae275a
+這個貌似也有點問題
+
+3.
+http://rdeshapriya.com/running-php-applications-in-apache-tomcat-7/
+war包方式，在此鏈接上可以下載war包：JavaBridgeTemplate621.war
+
+4.
+http://php-java-bridge.sourceforge.net/pjb/webapp.php
+war包方式，在此鏈接上可以下載war包：JavaBridgeTemplate721.war
+
+打開php的mysqli插件，在php.ini中打開下面這句的注釋
+extension=php_mysqli
+
+-----------------------------------------------------------------------------------
+有兩種方式在Tomcat中配置PHP環境，
+一種是使用配置tomcat
+一種是直接使用war包里的環境
+
+war包方式直接參考下面兩個網址的內容
+http://php-java-bridge.sourceforge.net/pjb/webapp.php
+http://rdeshapriya.com/running-php-applications-in-apache-tomcat-7/
+
+將war包放置于webapps中，將需要運行的php項目或文件放進JavaBridgeTemplate721.war
+解壓後的文件夾中，就能夠運行了。
+-----------------------------------------------------------------------------------
+配置tomcat的方式：
+參考：
+https://blog.csdn.net/weixin_42582102/article/details/86509941 
+
+我配置成功的具體步驟：
+
+1.首先在下载php程序，是一个zip的压缩包。
+2.将下载的php压缩包解压到tomcat的安装路径下，并重命名为php
+3.配置php的環境變量，path為解壓後的php路徑
+4.cmd窗口查看是否安装成功：php -v 
+5.将php路径下的php.ini-development 复制一份，将复制的那份改名为php.ini，
+  也放在该文件夹下，之后用记事本打开php.ini。
+  5.1 去掉extension_dir = "ext"前面的 分号
+  5.2 cgi.force_redirect修改为0，并去掉前面的分号，即 cgi.force_redirect = 0 
+  5.3 打開php的mysqli插件，去掉extension=php_mysqli前面的分號
+	（如果要使用php鏈接mysql這個必須打開）
+6.打开tomcat的conf文件夹。选择context.xml文件，在加上属性privileged="true"
+7.仍在tomcat的conf文件夹中,修改web.xml文件
+添加以下代碼：
+-------------------------------------------------------------------------------------
+<!--                           PHP                                          -->
+	<servlet>
+
+        <servlet-name>php</servlet-name>
+
+        <servlet-class>org.apache.catalina.servlets.CGIServlet</servlet-class>
+
+        <init-param>
+
+            <param-name>clientInputTimeout</param-name>
+
+            <param-value>200</param-value>
+
+        </init-param>
+
+        <init-param>
+
+            <param-name>debug</param-name>
+
+            <param-value>0</param-value>
+
+        </init-param>
+
+        <init-param>
+
+            <param-name>executable</param-name>
+
+            <!--php下载解压/安装的路径-->
+
+            <param-value>D:\apache-tomcat-9.0.22\php\php-cgi.exe</param-value>
+
+        </init-param>
+
+        <init-param>
+
+            <param-name>passShellEnvironment</param-name>
+
+            <param-value>true</param-value>
+
+        </init-param>
+
+        <init-param>
+
+            <param-name>cgiPathPrefix</param-name>
+
+            <!--自己tomcat下对应的url-->
+
+            <param-value>/</param-value>
+
+        </init-param>
+
+        <load-on-startup>5</load-on-startup>
+
+    </servlet>
+	
+<!--                                            php                         -->
+    <servlet-mapping>
+
+        <servlet-name>php</servlet-name>
+		<!--自己tomcat下对应的url-->
+
+        <url-pattern>*.php</url-pattern>
+
+    </servlet-mapping>
+--------------------------------------------------------------------------------------------
+8.把Navicat安裝目錄下的ntunnel_mysql.php文件放在D:\apache-tomcat-9.0.22\webapps\ROOT目錄
+  下，瀏覽器輸入
+  http://localhost:8080/ntunnel_mysql.php
+  就已經建好了Navicat訪問MySQL的http通道了

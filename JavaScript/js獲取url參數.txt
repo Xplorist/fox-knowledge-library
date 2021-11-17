@@ -1,0 +1,8 @@
+$scope.getUrlParam = function(param) {
+	var reg = new RegExp("(^|&)" + param + "=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return decodeURIComponent(r[2]);
+	return null;
+}
+
+注意：decodeURIComponent()函数非常重要

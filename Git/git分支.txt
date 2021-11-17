@@ -1,0 +1,110 @@
+git分支
+
+參考網址：
+https://www.runoob.com/git/git-branch.html
+官網：
+https://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E6%96%B0%E5%BB%BA%E4%B8%8E%E5%90%88%E5%B9%B6
+
+特別注意：
+1.創建了新的分支並想要將當前代碼提交到遠程倉庫，需要在已有代碼上新增
+或修改後再提交，遠程倉庫中才會新增分支和內容。
+
+2.克隆指定分支
+git clone -b dev http://xxx/xxx/xxx.git
+
+--------------------------------------------------------------------
+1.列出分支
+$ git branch
+* master
+
+--------------------------------------------------------------------
+2.创建一个分支
+$ git branch testing
+$ git branch
+* master
+  testing  
+
+--------------------------------------------------------------------
+3.切换分支
+$ ls
+README
+$ echo 'runoob.com' > test.txt
+$ git add .
+$ git commit -m 'add test.txt'
+[master 3e92c19] add test.txt
+ 1 file changed, 1 insertion(+)
+ create mode 100644 test.txt
+$ ls
+README        test.txt
+$ git checkout testing
+Switched to branch 'testing'
+$ ls
+README
+$ git checkout master
+Switched to branch 'master'
+$ ls
+README        test.txt
+
+--------------------------------------------------------------------
+4.使用 git checkout -b (branchname) 命令来创建新分支并立即切换到该分支下
+$ git checkout -b newtest
+Switched to a new branch 'newtest'
+$ git rm test.txt 
+rm 'test.txt'
+$ ls
+README
+$ touch runoob.php
+$ git add .
+$ git commit -am 'removed test.txt、add runoob.php'
+[newtest c1501a2] removed test.txt、add runoob.php
+ 2 files changed, 1 deletion(-)
+ create mode 100644 runoob.php
+ delete mode 100644 test.txt
+$ ls
+README        runoob.php
+$ git checkout master
+Switched to branch 'master'
+$ ls
+README        test.txt
+
+--------------------------------------------------------------------
+5.删除分支
+$ git branch
+* master
+  testing
+$ git branch -d testing
+Deleted branch testing (was 85fc7e7).
+$ git branch
+* master
+
+--------------------------------------------------------------------
+6.合并分支
+$ git branch
+* master
+  newtest
+$ ls
+README        test.txt
+$ git merge newtest
+Updating 3e92c19..c1501a2
+Fast-forward
+ runoob.php | 0
+ test.txt   | 1 -
+ 2 files changed, 1 deletion(-)
+ create mode 100644 runoob.php
+ delete mode 100644 test.txt
+$ ls
+README        runoob.php
+
+--------------------------------------------------------------------
+7.合并完后就可以删除分支:
+$ git branch -d newtest
+Deleted branch newtest (was c1501a2).
+$ git branch
+* master
+
+--------------------------------------------------------------------
+8.合并冲突
+詳情查考網址：
+https://www.runoob.com/git/git-branch.html
+
+--------------------------------------------------------------------

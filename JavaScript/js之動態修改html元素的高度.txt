@@ -1,0 +1,13 @@
+// 窗口發生變化是觸發
+$(window).resize(function() {
+	var height_x = $(window).height() * 0.6;
+	$("#treeDemo").css("height", height_x);
+	$("#bom_table").css("height", height_x);
+});
+
+// 頁面加載時觸發
+window.onload = function() {
+	var height_x = $(window).height() * 0.6;
+	$("#treeDemo").css("height", height_x);
+	$("#bom_table").css("height", height_x);
+};

@@ -1,0 +1,50 @@
+js中保存token
+
+參考網址：
+https://blog.csdn.net/qq_34309704/article/details/80572077
+
+實例：
+login: function () {
+	var _self = this;
+	_self.encodedPSW = md5(_self.password);
+
+	axios({
+		method: 'post',
+		url: '/user/login',
+		data: {
+			username: _self.username,
+			password: _self.encodedPSW
+		}
+	}).then(function(response) {
+		var result = response.data;
+		if(result.code == "1") {
+			alert("登錄成功:" + result.msg);
+			document.cookie = result.t;// cookie中保存token
+			//window.location.href = "recv/index.html";
+		} else {
+			alert("保存失敗:" + result.msg);
+		}
+	});
+},
+test_token: function () {
+	var _self = this;
+	var token = document.cookie.split(";")[0];// 從cookie中獲取token
+
+	axios({
+		method: 'get',
+		url: '/user/getUser?username=11',
+		headers: {
+			'token': token
+		},
+		data: ''
+	}).then(function(response) {
+		var result = response.data;
+		if(result.code == "1") {
+			alert("登錄成功:" + result.msg);
+			//window.location.href = "recv/index.html";
+		} else {
+			alert("保存失敗:" + result.msg);
+		}
+	});
+}
+

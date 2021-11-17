@@ -1,0 +1,44 @@
+1.git 常用命令：
+  git init
+  git clone -b 分支名 git@github.com:xplorist/template.git
+  git branch
+  git checkout
+  git add
+  git rm
+  git status
+  git commit -m ""
+  git push origin 分支名
+  git pull
+  git merge
+  git branch -d 分支名
+  git remote show origin
+  git remote add origin url
+  git remote set-url origin url
+  git push origin --delete 分支名
+  git branch -a 
+  git config --global http.postBuffer 524288000
+2.ssh 代理設置：
+	在C:\Users\mcebgadmin\.ssh中創建config文件（沒有後綴名）內容如下：
+	Host github.com *.github.com
+	ProxyCommand connect -H http://10.244.186.81:8088 %h %p   
+	IdentityFile /C/Users/mcebgadmin/.ssh/id_rsa      
+	User git
+	具體ssh到github設置參考http://www.runoob.com/git/git-remote-repo.html
+3.git 官方網址：https://git-scm.com/
+  git 官方書籍：https://git-scm.com/book/en/v2 本網頁中可以直接進行下載電子書。
+4.生成SSH Key：
+	ssh-keygen -t rsa -C "youremail@example.com" 
+	"youremail@example.com" 為註冊GitHub的郵箱，
+	提示Enter file in which to save the key (/c/Users/mcebgadmin/.ssh/id_rsa):
+	然後一直回車就行了，再到/c/Users/mcebgadmin/.ssh/id_rsa.pub文件中去複製，
+	然後粘貼到GitHub的SSH keys中就行了。
+	为了验证是否成功，输入以下命令：
+	$ ssh -T git@github.com
+	如果提示ssh: connect to host github.com port 22: Connection refused
+	有可能是公司內部網絡需要代理，查看上面的shh代理設置的內容
+5.設置全局賬號
+	git config --global user.email "you@example.com"
+	git config --global user.name "Your Name"
+	git config --global http.proxy http://10.244.186.81:8088
+	git config --global credential.helper wincred
+	git config --global credential.helper store

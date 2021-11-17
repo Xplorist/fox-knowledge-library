@@ -1,0 +1,6 @@
+从Tomcat9.0.14版本后，tomcat在运行期间在控制台输出的中文日志会出现乱码问题，对比了之前不会出现乱码问题的9.0.13版本，发现在%CATALINA_HOME%\conf\logging.properties文件中多了一项配置：
+
+java.util.logging.ConsoleHandler.encoding = UTF-8
+tomcat貌似好心办了坏事，明明想解决乱码问题，却造成了乱码问题，这是因为Windows系统控制台默认字符集是GBK，tomcat想按照UTF-8字符集输出，明显是有问题的。
+
+解决方法有两种，一种就是将上面的配置改为GBK，另一种就是将这一项配置删去(或者在这一行最前面加#注释)，之前版本没有这个配置就没出现乱码问题。

@@ -1,0 +1,24 @@
+參考網址：
+https://blog.csdn.net/iteye_13148/article/details/81801490
+https://blog.csdn.net/linghao00/article/details/7761849
+
+oracle函数中有不足位数补字符的函数
+LPAD和RPAD分别是左补位和右补位
+
+-----------------------------------------------------
+用法1：
+
+repalce(lpad(字段名，共几位), ' ', '0')
+如运行
+select replace(lpad('123',5),' ','0') from dual
+结果是00123
+即补足五位
+
+-----------------------------------------------------
+用法2：
+
+lpad(字段名，共几位, '0')
+如：
+select lpad((to_number('003') + 1), 3, '0') from dual
+結果是004
+即是將003轉換成數字後加1再轉換成原來的'00x'的格式

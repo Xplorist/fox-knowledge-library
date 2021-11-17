@@ -1,0 +1,9 @@
+<input ng-keyup="inputKeyUp($event)" />
+
+js:
+
+$scope.inputKeyUp = function(event) {
+	if(event.keyCode == 13) {
+		// 相應的處理代碼
+	}
+}

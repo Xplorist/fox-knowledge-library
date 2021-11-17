@@ -1,0 +1,10 @@
+1.新增：
+JAVA_HOME：D:\1ProgramInstall\Java\jdk1.8.0_201
+JRE_HOME：D:\1ProgramInstall\Java\jdk1.8.0_201\jre
+
+2.添加
+path：%JAVA_HOME%\bin;%JRE_HOME%\bin;
+
+3.測試
+cmd命令行中
+java -version

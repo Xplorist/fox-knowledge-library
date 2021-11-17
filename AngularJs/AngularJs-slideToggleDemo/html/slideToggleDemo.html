@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>slideToggleDemo</title>
+	<!-- Bootstrap core CSS --><!-- 目前分頁只有bootstrap3css支持tm.pagination插件-->
+    <link rel="stylesheet" href="../css_lib/bootstrap.min.css">
+    <!-- Custom styles for this template -->
+	<link rel="stylesheet" href="../css_code/slideToggleDemo.css">
+</head>
+<body>
+	<div ng-app="myApp" data-ng-controller="MainController">      
+		<input type="button" value="Toggle First" ng-click="box1=!box1">
+		<input type="button" value="Toggle Second" ng-click="box2=!box2">
+		<input type="button" value="Toggle third" ng-click="box3=!box3">
+	
+		<div class="div1" data-slide-toggle="box1" data-slide-toggle-duration="100" >
+			<p>This is section #1</p>
+		</div>
+		<div class="div2" data-slide-toggle="box2" data-slide-toggle-duration="2000">
+			<p>This is another section #1</p>
+		</div>
+		<div class="div3" data-slide-toggle="box3">
+			<p>This is 3 section #1</p>
+		</div>
+
+		<table border="1">
+			<tr data-slide-toggle="box1" data-slide-toggle-duration="100">
+				<td>This is section #1</td>
+			</tr>
+			<tr data-slide-toggle="box2" data-slide-toggle-duration="100">
+				<td>This is section #2</td>
+			</tr>
+		</table>
+	</div>
+	
+	<!-- Bootstrap AngularJs jQuery tm.pagination core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="../js_lib/jquery.js"></script>
+	<script type="text/javascript" src="../js_lib/angular.min.js"></script>
+	<script type="text/javascript" src="../js_lib/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js_lib/tm.pagination.js"></script>
+	<!-- Icons -->
+	<script type="text/javascript" src="../js_lib/feather.min.js"></script>
+    <script>
+    	feather.replace()
+    </script>
+    <!-- Custom JavaScript for this template -->
+	<script type="text/javascript" src="../js_code/slideToggleDemo.js"></script>
+</body>
+</html>

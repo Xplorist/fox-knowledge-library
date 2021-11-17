@@ -1,0 +1,6 @@
+// 複製到剪切板
+function copyToClipboard() {
+	hot.selectCell(0, 0, hot.countRows() - 1, hot.countCols() - 1);
+    document.execCommand('copy');
+    alert("已將表格複製到剪切板");
+}

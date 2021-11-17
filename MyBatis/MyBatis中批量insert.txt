@@ -1,0 +1,20 @@
+示例：
+	 <!-- 新增原物料list -->
+	 <insert id="addOriginMaterialList">
+		insert into SOP_ORIGIN_MATERIAL t
+		  (t.sop_main_id, t.name, t.hh_no, t.customer_no, t.list_order)
+		<foreach collection="list" item="i" separator="union all">
+		  (
+		    select 
+			   #{sop_main_id},
+			   #{i.name},
+			   #{i.hh_no},
+			   #{i.customer_no},
+			   #{i.list_order}
+		    from dual
+		   )	 
+		</foreach>
+	 </insert>
+	 
+注意：
+沒有values

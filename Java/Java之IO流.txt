@@ -1,0 +1,60 @@
+參考網址：
+https://blog.csdn.net/qq_33642117/article/details/52074796
+
+IO流
+
+字節流、字符流
+
+-----------------------------------------------
+字節流：
+InputStream OutputStream
+
+InputStream
+FileInputStream BufferedInputStream
+
+OutputStream
+FileOutputStream BufferedOutputStream
+
+-----------------------------------------------
+字符流
+Reader Writer
+
+Reader
+InputStreamReader BufferedReader
+
+Writer
+OutputStreamWriter BufferedWriter
+
++++++++++++++++++++++++++++++++++++++++++++++++
+
+常用文件讀取寫出操作示例：
+採用緩衝流方式
+
+FileInputStream inputStream = new FileInputStream("f://滑板//HEEL_FLIP.mp4");
+BufferedInputStream bis = new BufferedInputStream(inputStream);
+FileOutputStream outputStream = new FileOutputStream("HEEL_FLIP.mp4");
+BufferedOutputStream bos = new BufferedOutputStream(outputStream);
+
+int len;
+byte[] bs = new byte[1024];
+
+while ((len = bis.read(bs)) != -1) {
+	bos.write(bs, 0, len);
+}
+
+bis.close();
+bos.close();
+
++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+常用讀取文件字符內容示例：
+
+//生成字符缓冲流对象
+BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("test.txt")));
+String str;
+//一次性读取一行
+while ((str = reader.readLine()) != null) {
+	System.out.println(str);
+}
+//关闭流
+reader.close();

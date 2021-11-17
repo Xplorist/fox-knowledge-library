@@ -1,0 +1,21 @@
+JS报错：require is not defined
+
+參考網址：
+https://blog.csdn.net/wml00000/article/details/84181227
+
+报错原因：
+浏览器端不能识别require关键字，require是node.js环境下的，在node_modules文件夹里面的模块下面常见require
+
+解决方法：
+通过工具browserify或者是webpack把js文件编译一下，转成浏览器端可识别的。
+
+//安装browserify ,我这里是全局安装
+
+npm install -g browserify
+
+// 编译
+
+browserify ./source/module.js -o ./dist/dist.js
+
+即可在dist目录下看到打包后的dist.js文件。 
+browserify 后面的第一个参数表示要打包的前端程序的入口，-o或者>表示打包后的输出文件。browserify会根据入口文件中的require或者import(ES6,需要安装babel)自动完成依赖分析，并将依赖文件打包为一个单文件。

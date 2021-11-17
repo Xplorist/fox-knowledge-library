@@ -1,0 +1,63 @@
+詳見網址：
+1.https://www.itread01.com/content/1542260296.html
+
+2.https://blog.csdn.net/baidu_19473529/article/details/84311431
+
+大致步驟：
+1.下載zip
+2.解壓縮
+3.配置環境變量
+----------------------------------------------------------
+在path中新增:;D:\1ProgramInstall\mysql\mysql-5.7.24-win32\bin
+----------------------------------------------------------
+4.新建MySQL配置文件my.ini,在D:\1ProgramInstall\mysql\mysql-5.7.24-win32目錄下
+----------------------------------------------------------
+[mysql]
+# 设置mysql客户端默认字符集
+default-character-set=utf8
+[mysqld]
+#设置3306端口
+port = 3306
+
+server_id=100
+# 设置mysql的安装目录
+basedir=D:\mysql-5.7.24-winx64
+# 设置mysql数据库的数据的存放目录
+datadir=D:\mysql-5.7.24-winx64\data
+# 允许最大连接数
+max_connections=200
+# 服务端使用的字符集默认为8比特编码的latin1字符集
+character-set-server=utf8
+# 创建新表时将使用的默认存储引擎
+default-storage-engine=INNODB
+-----------------------------------------------------------
+6.以管理員身份運行cmd命令窗口運行，
+并執行相應操作,初始化成功，并生成初始化密碼，注意一定要把密碼截圖或者是抄下來。
+A temporary password is generated for root@localhost:9P3gtcAf68!u
+初始密碼為：9P3gtcAf68!u
+-----------------------------------------------------------
+cd D:\1ProgramInstall\mysql\mysql-5.7.24-win32\bin
+mysqld --defaults-file=D:\1ProgramInstall\mysql\mysql-5.7.24-win32\my.ini --initialize --user=mysql --console
+-----------------------------------------------------------
+7.安裝MySQL服務，以管理員身份運行cmd
+-----------------------------------------------------------
+mysqld --install MySQL --defaults-file=D:\1ProgramInstall\mysql\mysql-5.7.24-win32\my.ini
+-----------------------------------------------------------
+8.啟動MySQL，兩種方式
+-----------------------------------------------------------
+#后台运行 
+net start mysql
+#前台运行
+mysqld --defaults-file=D:\1ProgramInstall\mysql\mysql-5.7.24-win32\my.ini
+-----------------------------------------------------------
+9.首次連線需要修改root密碼
+-----------------------------------------------------------
+  mysql -u root -p  
+  mysql> set password=password("mysql");
+  mysql> flush privileges;
+-----------------------------------------------------------
+10. 管理員身份運行cmd
+	停止服務
+  net stop mysql
+	删除服务
+  sc delete mysql

@@ -1,0 +1,14 @@
+問題:
+Jboss Server ErrorServer already running on localhost 
+
+1.查端口殺進程
+	netstat -ano|findstr "8080"
+
+	tasklist|findstr 2040
+
+	taskkill /f /t /im HPLaserJetService.exe
+
+2.本地網址不用系統代理
+	Open IE, Tools -> Internet Options -> Connections -> LAN Setting -> Check mark on checkbox 
+	"Bypass proxy server for local address"
+	勾選近端網址不使用Proxy伺服器， 不然就會報這個錯

@@ -1,0 +1,57 @@
+h5之video在chrome49中直接傳src無法顯示視頻解決方法
+
+先在后臺將視頻的服務器上的路徑傳到前端，然後再把這個地址到後台去異步請求文件流，
+再將從後台下載來的文件生成路徑傳給video標籤的src屬性。
+
+參考網址：
+https://tommy88.top/2018/05/05/video-url-blob-encrypt/
+
+var app = angular.module("myApp", []);
+
+app.controller("myController", function($scope, $http) {
+	
+	$scope.pkid = "091D5653E073471990A8B439DFB84E9A";
+	$http({
+		method: "POST",
+		url: "../../esop/querySavedInfo4Ang.x",
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		data: $scope.pkid
+	}).then(function successCallBack(response) {
+		var data = response.data;
+		// 視頻文件
+		var videoFile = data.videoFile;
+		$scope.videoFileUrl = videoFile.file_url;
+		$scope.videoFileOriginName = videoFile.file_origin_name;
+		$scope.videoFileSaveName = videoFile.file_save_name;
+		$scope.videoFileSavePath = videoFile.file_save_path;
+		$scope.videoMemo = videoFile.file_memo;
+		$("#video").attr("src", $scope.videoFileUrl);
+		
+		$scope.getVideo($scope.videoFileUrl);
+	},function errorCallBack(error){
+		console.log(error);
+		alert("請求失敗！");
+	});
+	
+	// 獲取視頻文件
+	$scope.getVideo = function(videoFileUrl) {
+		//创建XMLHttpRequest对象
+	    var xhr = new XMLHttpRequest();
+	    //配置请求方式、请求地址以及是否同步
+	    xhr.open('POST', videoFileUrl, true);
+	    //设置请求结果类型为blob
+	    xhr.responseType = 'blob';
+	    //请求成功回调函数
+	    xhr.onload = function (e) {
+	        if (this.status == 200) {//请求成功
+	            //获取blob对象
+	            var blob = this.response;
+	            //获取blob对象地址，并把值赋给容器
+	            document.querySelector('video').src=URL.createObjectURL(blob);
+	        }
+	    };
+	    xhr.send();
+	}
+});

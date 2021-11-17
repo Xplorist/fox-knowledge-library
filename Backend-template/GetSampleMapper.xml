@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.partsMeasurePage.mapper.GetSampleMapper">
+	  	<select id="queryApplyBilList" resultType="com.partsMeasurePage.bean.ApplyBillBean">
+	  		select t.*, g.*
+			  from PARTS_MEASURE_APPLY_BILL t, PARTS_MEASURE_GET_SAMPLE g
+			 where t.bill_no = g.bill_no(+)
+			   and t.bill_status in ('S6', 'S7')
+			   and t.is_use = 'Y'
+	  	</select>
+	  	
+	  	<insert id="addGetSampleBill" parameterType="com.partsMeasurePage.bean.Get_sample_bean">
+	  		insert into PARTS_MEASURE_GET_SAMPLE t
+			  (t.bill_no,
+			   t.get_sample_emp_no,
+			   t.get_sample_emp_name,
+			   t.get_sample_emp_tel,
+			   t.gs_test_ensure_emp_no,
+			   t.gs_tes_ensure_emp_name,
+			   t.gs_test_ensure_emp_tel,
+			   t.get_num,
+			   t.gs_look_ok_num,
+			   t.gs_memo)
+			values
+			  (#{bill_no},
+			   #{get_sample_emp_no},
+			   #{get_sample_emp_name},
+			   #{get_sample_emp_tel},
+			   #{gs_test_ensure_emp_no},
+			   #{gs_tes_ensure_emp_name},
+			   #{gs_test_ensure_emp_tel},
+			   #{get_num},
+			   #{gs_look_ok_num},
+			   #{gs_memo})
+	  	</insert>
+	  	
+	  	
+  </mapper>

@@ -1,0 +1,7 @@
+Connection => MySQL => HTTP 
+將Use HTTP tunnel選中，輸入遠程服務器的tomcat服務器中的ntunnel_mysql.php
+例如：http://10.244.186.86:8081/ntunnel_mysql.php
+如需使用代理
+Proxy中選中Use proxy，然後輸入相應信息即可
+
+如何在tomcat中配置php環境，查看tomcat目錄下的相應筆記

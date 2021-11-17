@@ -1,0 +1,8 @@
+中文網站：
+http://www.android-studio.org/
+
+官方中國cn網站：
+https://developer.android.google.cn/studio/
+
+中文工具下載站
+http://tools.android-studio.org/index.php/sdk

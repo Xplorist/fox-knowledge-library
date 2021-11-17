@@ -1,0 +1,3 @@
+IDEA清除緩存
+
+File -> Invalidate caches

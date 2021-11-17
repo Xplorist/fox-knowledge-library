@@ -1,0 +1,2 @@
+juquery異步請求Struts2
+struts.xml中使用json-default的配置時注意不要用攔截器，不然會導致前端無法傳參數到後台

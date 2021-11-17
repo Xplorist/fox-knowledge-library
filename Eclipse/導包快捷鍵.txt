@@ -1,0 +1,3 @@
+eclipse默认導包的快捷鍵為Ctrl+Shift+O
+由於Version: 2019-03 (4.11.0)版，這個快捷鍵出現了問題
+於是將快速導包的快捷鍵修改為Ctrl+Shift+I 

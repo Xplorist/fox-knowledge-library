@@ -1,0 +1,15 @@
+table{
+   
+    table-layout:fixed;/* 只有定义了表格的布局算法为fixed，下面td的定义才能起作用。 */
+}
+td{
+    width:100%;
+    word-break:keep-all;/* 不换行 */
+    white-space:nowrap;/* 不换行 */
+    overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+    text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+}
+	
+<br><span style="font-size: 16px;">如果担心隐藏了看不到完整的单元格内容建议在单元格上面加上title属性值就是单元格的完整内容这样只要鼠标经过就能显示全部了</span>
+
+上面的方法都是沒有用的，要在<div>中添加overflow:hidden才能夠看到效果，親測有效

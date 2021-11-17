@@ -1,0 +1,1 @@
+<div ng-repeat="x in chosenAuditorList track by $index">{{x.emp_name+'('+x.emp_no+')'}}</div>

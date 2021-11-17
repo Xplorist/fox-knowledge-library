@@ -1,0 +1,19 @@
+oracle獲取字符串長度函數
+
+參考網址：
+https://blog.csdn.net/fengyifei11228/article/details/6072431
+
+lengthb(string)计算string所占的字节长度：返回字符串的长度，单位是字节
+
+length(string)计算string所占的字符长度：返回字符串的长度，单位是字符
+
+对于单字节字符,LENGTHB和LENGTH是一样的.
+
+如可以用length(‘string’)=lengthb(‘string’)判断字符串是否含有中文。
+
+ 
+注：
+
+一个汉字在Oracle数据库里占多少字节跟数据库的字符集有关，UTF８时，长度为三。
+
+select lengthb('飘') from dual   可查询汉字在Oracle数据库里占多少字节

@@ -1,0 +1,119 @@
+	private String errorFlag = null;
+	private Connection conn = null;
+	private PreparedStatement ps = null;
+	private ResultSet rs = null;
+	private CallableStatement proc = null;
+	protected SqlSession sqlSession = null;
+	
+	// 初始化dao變量
+	public void initResources() {
+		try {
+			errorFlag = "0";
+			conn = DataBaseUtil.getConnection();
+			ps = null;
+			rs = null;
+			conn.setAutoCommit(false);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	// 關閉dao變量
+	public void closeResources() {
+		try {
+			if (rs != null) {
+				rs.close();
+			}
+			if (ps != null) {
+				ps.close();
+			}
+			if (conn != null && !conn.isClosed()) {
+				if ("1".equals(errorFlag)) {
+					conn.rollback();
+				} else {
+					conn.commit();
+				}
+				conn.setAutoCommit(true);
+				conn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// dao模板
+	public String template() {
+		String flag = "1";// 1成功，0失敗
+		initResources();
+
+		try {
+			String sql = "";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, "");
+			//ps.executeUpdate();
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				rs.getString("");
+			}
+		} catch (SQLException e) {
+			flag = "0";
+			errorFlag = "1";
+			e.printStackTrace();
+		}
+		closeResources();
+		
+		return flag;
+	}
+	
+	// 調用存儲過程dao模板
+	public String procedureTemplate(){
+		 String flag = "1";// 1成功，0失敗
+		 initResources();
+		 
+	     try {
+			proc = conn.prepareCall("{ call HYQ.TESTB(?,?) }");
+			proc.setString(1, "100");
+			proc.registerOutParameter(2, Types.VARCHAR);
+			proc.execute();
+			flag = proc.getString(2);
+		} catch (SQLException e) {
+			errorFlag = "1";
+			flag = "0";
+			e.printStackTrace();
+		} 
+	    closeResources();
+	     
+	    return flag;
+	}
+	
+	// 初始化MyBatis變量
+	protected void initMyBatisResources() {
+		sqlSession = SqlSessionFactoryUtil.openSqlSession();
+	}
+	
+	// 關閉MyBatis變量
+	protected void closeMyBatisResources() {
+		if(sqlSession != null) {
+			sqlSession.close();
+		}
+	}
+	
+	// MyBatis模板dao
+	public String template4MyBtis() {
+		String flag = "1";
+		initMyBatisResources();
+		try {
+			//NewMouldDrawMapper mapper = sqlSession.getMapper(NewMouldDrawMapper.class);
+			//List<TemplateBean> list = mapper.queryTemplatList();
+			//mapper.addTemplate();
+			sqlSession.commit();
+		} catch (Exception e) {
+			flag = "0";
+			e.printStackTrace();
+			sqlSession.rollback();
+		}
+		closeMyBatisResources();
+		
+		return flag;
+	}

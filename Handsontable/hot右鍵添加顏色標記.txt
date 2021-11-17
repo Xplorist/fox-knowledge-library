@@ -1,0 +1,85 @@
+var color_rows = [];
+var hot_data;
+
+function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
+  Handsontable.renderers.TextRenderer.apply(this, arguments);
+  td.style.background = 'yellow';
+}
+
+function cells_option(row, col) {
+	var cellProperties = {};
+    
+	for(var i = 0; i < color_rows.length; i++) {
+		if (row === color_rows[i]) {
+			cellProperties.renderer = firstRowRenderer; // uses function directly
+		}
+	}
+	
+    return cellProperties;
+}
+
+var
+  container = document.getElementById('example'),
+  hot,
+  hot_options;
+
+hot_options = {
+  startRows: 1,
+  startCols: 15,
+  rowHeaders: true,
+  colHeaders: ['項次', '組立階次', 'HH P/N (CD)', 'REV.(CD)', 'Apple P/N', 'REV.', '用量', '單位', '單重(kg)', '類別', '英文名稱', '中文名稱', '制程DRI(CD)', '備注', 'color'],
+  hiddenColumns: {
+    columns: [14],
+    indicators: true
+  },
+  contextMenu: {
+	   callback: function (key, selection, clickEvent) {
+		  // Common callback for all options
+		  //console.log(key, selection, clickEvent);
+		},
+		items: {
+			"mark_color": {
+				key: 'mark_color_key',
+				name: '標記行顏色',
+				callback: function(key, selection, clickEvent) {
+					var selected_row = selection[0].start.row;
+					color_rows.push(selected_row);
+					hot_data = hot.getData();
+					hot_data[selected_row][14] = true;
+					hot_options.data = hot_data;
+					loadHot();
+				}
+			},
+			"remove_color": {
+				key: 'remove_color_key',
+				name: '移除行顏色',
+				callback: function(key, selection, clickEvent) {
+					var selected_row = selection[0].start.row;
+					for(var i = 0; i < color_rows.length; i++) {
+						if(color_rows[i] === selected_row) {
+							color_rows.splice(i, 1);
+						}
+					}
+					hot_data = hot.getData();
+					hot_data[selected_row][14] = null;
+					hot_options.data = hot_data;
+					loadHot();
+				}
+			}
+		}
+  },
+  cells: cells_option,
+  licenseKey: 'non-commercial-and-evaluation'
+};
+
+function loadHot() {
+	var element = document.getElementById("example");
+	while (element.firstChild) {
+	  element.removeChild(element.firstChild);
+	}
+	hot = new Handsontable(container, hot_options);
+}
+loadHot();
+
+核心在於將需要標記的行添加到全局變量color_rows中，每次右鍵菜單點擊之後要把hot的子元素清空，然後再
+重新加載參數重新渲染。

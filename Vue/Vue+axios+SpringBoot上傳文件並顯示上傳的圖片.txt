@@ -1,0 +1,465 @@
+Vue+axios+SpringBoot上傳文件並顯示上傳的圖片
+
+实例：
+
+前端
+-------------------------------------------------------------------------------------
+html:
+<div id="app">
+    <input type="file" @change="update_file($event)">
+    <img :src="img_src">
+    <div>
+        <a :href="img_src" style="color: red;">下載{{ file_origin_name }}</a>
+        <button @click="delete_file">刪除{{ file_origin_name }}</button>
+    </div>
+</div>
+
+-------------------------------------------------------------------------------------
+js:
+var app = new Vue({
+    el: '#app',
+    data: {
+        img_src: '',
+        file_save_path: '',// 'user_pic/2019/09/24',
+        file_save_name: '',//'(170903684)register_bg_pic.jpg',
+        file_origin_name: '' //'register_bg_pic.jpg'
+    },
+    methods: {
+        update_file: function (event) {
+            var _self = this;
+            var file = event.target.files[0];
+            var param = new FormData();
+            param.append('file', file);
+            param.append('file_type', 'user_pic');
+
+            axios({
+                method: 'post',
+                url: '/api/ftp_file/upload',
+                headers: {'Content-Type':'multipart/form-data'},
+                data: param
+            }).then(function(response) {
+                var data = response.data;
+                if(data.code == "1") {
+                    var t = data.t;
+                    // encodeURIComponent() 函數對參數進行編碼
+                    // encodeURIComponent() 非常重要，不然後端服務器無法處理
+                    _self.file_save_path = encodeURIComponent(t.file_save_path);
+                    _self.file_save_name = encodeURIComponent(t.file_save_name);
+                    _self.file_origin_name = encodeURIComponent(t.file_origin_name);
+                    _self.build_img_src();
+                    //alert(_self.img_src);
+                    alert("上傳成功, 文件名:" +  _self.file_origin_name);
+                } else {
+                    alert("上傳失敗," + data.msg + data.t);
+                }
+            });
+        },
+        delete_file: function() {
+            var _self = this;
+
+            axios({
+                method: 'post',
+                url: '/api/ftp_file/delete',
+                data: {
+                    file_save_path: _self.file_save_path,
+                    file_save_name: _self.file_save_name,
+                    file_origin_name: _self.file_origin_name
+                }
+            }).then(function(response) {
+                var data = response.data;
+                if(data.code == "1") {
+                    alert("刪除成功" + data.msg + data.t);
+                    _self.img_src = "";
+                    _self.file_save_path = "";
+                    _self.file_save_name = "";
+                    _self.file_origin_name = "";
+                } else {
+                    alert("刪除失敗" + data.msg + data.t);
+                }
+            });
+        },
+        build_img_src: function() {
+            var _self = this;
+            _self.img_src = '/api/pic_show/load?file_save_path=' + _self.file_save_path
+                +'&file_save_name=' + _self.file_save_name + '&file_origin_name=' + _self.file_origin_name;
+        }
+    },
+    created: function() {
+        var _self = this;
+        //_self.build_img_src();
+    }
+});
+
+-------------------------------------------------------------------------------------
+
+Java SpringBoot後台：
+-------------------------------------------------------------------------------------
+參考網址：
+https://www.cnblogs.com/shuaifing/p/8274906.html
+
+1.pom.xml
+
+<!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+<dependency>
+	<groupId>commons-net</groupId>
+	<artifactId>commons-net</artifactId>
+	<version>3.6</version>
+</dependency>
+
+-------------------------------------------------------------------------------------
+
+2.controller
+FTP_File_Controller.java
+
+package com.foxconn.bidding.controller;
+
+import com.foxconn.bidding.model.FTP_File_Param;
+import com.foxconn.bidding.model.ResultParam;
+import com.foxconn.bidding.util.FTP_File_Util;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+
+@RestController
+@RequestMapping("api/ftp_file")
+public class FTP_File_Controller {
+    @Autowired
+    private FTP_File_Util util;
+
+    // 上傳用戶頭像圖片
+    @RequestMapping("/upload")
+    public ResultParam upload(@RequestParam("file") MultipartFile file, @RequestParam("file_type") String file_type, HttpServletRequest request) {
+        return util.fileUpload(file_type, file);
+    }
+
+    // 刪除文件
+    @RequestMapping("/delete")
+    public ResultParam delete(@RequestBody FTP_File_Param param, HttpServletRequest request) {
+        return util.fileDelete(param);
+    }
+}
+
+-------------------------------------------------------------------------------------
+
+3.util工具類
+FTP_File_Util.java
+
+package com.foxconn.bidding.util;
+
+import com.foxconn.bidding.model.FTP_File_Param;
+import com.foxconn.bidding.model.ResultParam;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+@Component
+public class FTP_File_Util {
+    @Autowired
+    private FTP_Properties_Util util;
+
+    /**
+     * 文件上傳
+     * @param type_base_path 類型根路徑（例如： user_pic為用戶頭像圖片類型的文件的根路徑）
+     * @param file 文件
+     * @return 響應結果
+     */
+    public ResultParam fileUpload(String type_base_path, MultipartFile file) {
+        String file_origin_name = file.getOriginalFilename();
+        InputStream input = null;
+        try {
+            input = file.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResultParam("0", "上傳文件失敗", null);
+        }
+
+        String FTP_Address = util.getAddress();
+        Integer FTP_Port = util.getPort();
+        String FTP_Username = util.getUsername();
+        String FTP_Password = util.getPassword();
+
+        FTPClient ftp = new FTPClient();
+        ftp.setControlEncoding("GBK");
+
+        Date date = new Date();
+        String year = new SimpleDateFormat("yyyy").format(date);
+        String month = new SimpleDateFormat("MM").format(date);
+        String day = new SimpleDateFormat("dd").format(date);
+        String file_save_path = type_base_path + File.separator + year + File.separator + month + File.separator + day;// 取得配置文件路徑
+        String file_save_name = "(" + new SimpleDateFormat("HHmmssSSS").format(new Date()).toString() + ")"
+                + file_origin_name;
+
+        try {
+            int replay;
+            ftp.connect(FTP_Address, FTP_Port);
+            ftp.login(FTP_Username, FTP_Password);
+            replay = ftp.getReplyCode();
+            if(!FTPReply.isPositiveCompletion(replay)) {
+                ftp.disconnect();
+                return new ResultParam("0", "上傳文件失敗", null);
+            }
+            ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+            String workingDirectory = ftp.printWorkingDirectory();
+            String[] paths = file_save_path.split("\\\\");
+            for(int i = 0; i < paths.length; i++) {
+                ftp.makeDirectory(paths[i]);
+                boolean changeWorkingDirectory_flag = ftp.changeWorkingDirectory(paths[i]);
+                if(!changeWorkingDirectory_flag) {
+                    return new ResultParam("0", "上傳文件失敗", workingDirectory);
+                }
+            }
+
+            ftp.storeFile(file_save_name, input);
+            input.close();
+            ftp.logout();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultParam("0", "上傳文件失敗", null);
+        } finally {
+            try {
+                if(ftp.isConnected()) {
+                    ftp.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ResultParam("0", "上傳文件失敗", null);
+            }
+        }
+        FTP_File_Param ftp_file_param = new FTP_File_Param();
+        ftp_file_param.setFile_save_path(file_save_path);
+        ftp_file_param.setFile_save_name(file_save_name);
+        ftp_file_param.setFile_origin_name(file_origin_name);
+
+        return new ResultParam("1", "上傳文件成功", ftp_file_param);
+    }
+
+    /**
+     * 文件下載
+     * @param file_save_path 文件保存路徑
+     * @param file_save_name 文件保存名稱
+     * @return 響應結果
+     */
+    public ResultParam fileDownload(String file_save_path, String file_save_name) {
+        InputStream is = null;
+
+        String FTP_Address = util.getAddress();
+        Integer FTP_Port = util.getPort();
+        String FTP_Username = util.getUsername();
+        String FTP_Password = util.getPassword();
+
+        FTPClient ftp = new FTPClient();
+        ftp.setControlEncoding("GBK");
+
+        try {
+            int replay;
+            ftp.connect(FTP_Address, FTP_Port);
+            ftp.login(FTP_Username, FTP_Password);
+            replay = ftp.getReplyCode();
+            if(!FTPReply.isPositiveCompletion(replay)) {
+                ftp.disconnect();
+                return new ResultParam("0", "下載文件失敗", null);
+            }
+
+            ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+            String[] paths = file_save_path.split("\\\\");
+            for(int i = 0; i < paths.length; i++) {
+                ftp.makeDirectory(paths[i]);
+                boolean changeWorkingDirectory_flag = ftp.changeWorkingDirectory(paths[i]);
+                if(!changeWorkingDirectory_flag) {
+                    return new ResultParam("0", "下載文件失敗", null);
+                }
+            }
+
+            is = ftp.retrieveFileStream(file_save_name);
+            //ftp.logout();// 必須把登出的代碼注釋掉，不然會導致大文件無法下載
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultParam("0", "下載文件失敗", null);
+        } finally {
+            try {
+                if(ftp.isConnected()) {
+                    ftp.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ResultParam("0", "下載文件失敗", null);
+            }
+        }
+
+        return new ResultParam("1", "下載文件成功", is);
+    }
+
+    /**
+     * 文件刪除
+     * @param param param中必須包含 file_save_path, file_save_name
+     * @return
+     */
+    public ResultParam fileDelete(FTP_File_Param param) {
+        String file_save_path = null;
+        String file_save_name = null;
+        try {
+            file_save_path = URLDecoder.decode(param.getFile_save_path(), "UTF-8");
+            file_save_name = URLDecoder.decode(param.getFile_save_name(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String FTP_Address = util.getAddress();
+        Integer FTP_Port = util.getPort();
+        String FTP_Username = util.getUsername();
+        String FTP_Password = util.getPassword();
+
+        FTPClient ftp = new FTPClient();
+        ftp.setControlEncoding("GBK");
+
+        try {
+            int replay;
+            ftp.connect(FTP_Address, FTP_Port);
+            ftp.login(FTP_Username, FTP_Password);
+            replay = ftp.getReplyCode();
+            if(!FTPReply.isPositiveCompletion(replay)) {
+                ftp.disconnect();
+                return new ResultParam("0", "刪除文件失敗", null);
+            }
+
+            ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+            String file_url = file_save_path + File.separator + file_save_name;
+
+            boolean deleteFile_flag = ftp.deleteFile(file_url);
+            if(!deleteFile_flag) {
+                return new ResultParam("0", "刪除文件失敗", null);
+            }
+            //ftp.logout();// 必須把登出的代碼注釋掉，不然會導致大文件無法下載
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultParam("0", "刪除文件失敗", null);
+        } finally {
+            try {
+                if(ftp.isConnected()) {
+                    ftp.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ResultParam("0", "刪除文件失敗", null);
+            }
+        }
+
+        return new ResultParam("1", "刪除文件成功", null);
+    }
+}
+
+-------------------------------------------------------------------------------------
+
+4.properties配置文件工具類
+package com.foxconn.bidding.util;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+
+@Data
+@Component
+@ConfigurationProperties(prefix = "ftp")
+@PropertySource("classpath:configuration/ftp.properties")
+public class FTP_Properties_Util {
+    private String address;
+    private Integer port;
+    private String username;
+    private String password;
+}
+
+-------------------------------------------------------------------------------------
+
+5.properties配置文件
+
+ftp.properties
+
+ftp.address=10.244.168.48
+ftp.port=21
+ftp.username=bidding
+ftp.password=bidd.2019
+
+-------------------------------------------------------------------------------------
+
+6.顯示圖片controller
+Pic_Show_Controller.java
+
+package com.foxconn.bidding.controller;
+
+import com.foxconn.bidding.model.ResultParam;
+import com.foxconn.bidding.util.FTP_File_Util;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+
+@Controller
+@RequestMapping("api/pic_show")
+public class Pic_Show_Controller {
+    @Autowired
+    private FTP_File_Util util;
+
+    // 加載圖片(param中必須傳遞 file_save_path, file_save_name, file_origin_name)
+    // html中用<a href="/api/pic_show/load?file_save_path=xxx&file_save_name=yyy&file_origin_name=zzz"></a>來實現下載
+    // html中用<img src="/api/pic_show/load?file_save_path=xxx&file_save_name=yyy&file_origin_name=zzz"></img>來實現顯示
+    @RequestMapping("/load")
+    public void load(HttpServletRequest request, HttpServletResponse response) {
+        String file_save_path = request.getParameter("file_save_path");
+        String file_save_name = request.getParameter("file_save_name");
+        String file_origin_name = request.getParameter("file_origin_name");
+
+        OutputStream os = null;
+        InputStream is = null;
+        try {
+            ResultParam resultParam = util.fileDownload(file_save_path, file_save_name);
+            if(resultParam.getT() != null) {
+                response.setContentType("application/x-download");
+                response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(file_origin_name, "UTF-8"));
+
+                is = (InputStream) resultParam.getT();
+                BufferedInputStream bis = new BufferedInputStream(is);
+                os = response.getOutputStream();
+                byte[] buffer = new byte[1024];
+                int length;
+
+                while((length = bis.read(buffer)) != -1) {
+                    os.write(buffer, 0, length);
+                }
+                is.close();
+                os.flush();
+                os.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+// 備註html中用<a href="/api/pic_show/load?file_save_path=xxx&file_save_name=yyy&file_origin_name=zzz">
+// 來實現下載
+-------------------------------------------------------------------------------------
+

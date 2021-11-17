@@ -1,0 +1,30 @@
+一般json數據請求，默认的responseType: 'json'
+
+axios({
+  method: 'post',
+  url: '/ePDMWeb/ebom/saveData.x',
+  data: mainInfo._data
+}).then(function(response) {
+	var result = response.data;
+	if(result == "0") {
+		alert("保存失敗");
+	} else {
+		alert("保存成功");
+	}
+});
+
+--------------------------------------------
+文件下載請求，responseType: 'blob'
+
+axios({
+  url: '/ePDMWeb/excelDownload/downloadExcel.x',
+  method: 'POST',
+  responseType: 'blob'
+}).then(function(response){
+	var url = window.URL.createObjectURL(new Blob([response.data]));
+	var link = document.createElement('a');
+	link.href = url;
+	link.setAttribute('download', 'file.xls'); 
+	document.body.appendChild(link);
+	link.click();
+});

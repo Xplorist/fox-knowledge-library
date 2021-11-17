@@ -1,0 +1,56 @@
+Vue-cli 3.x配置跨域代理
+
+参考网址：
+https://segmentfault.com/a/1190000016602951
+https://segmentfault.com/a/1190000014474361
+https://github.com/chimurai/http-proxy-middleware#proxycontext-config
+
+創建vue.config.js
+
+------------------------------------------------------------------------------------
+vue.config.js內容如下：
+
+// vue.config.js
+module.exports = {
+    devServer: {
+        proxy: {
+            '/api': {
+                target: 'http://10.168.1.118:8081/api',
+                changeOrigin: true,
+                ws: true,
+                pathRewrite: {
+                  '^/api': ''
+                }
+            }
+        }
+    }
+}
+
+------------------------------------------------------------------------------------
+前端請求：
+
+methods: {
+    query_test: function() {
+      var _self = this;
+
+      _self.axios({
+                  method: 'post',
+                  url: '/api/baseInfo/query_factory_list',
+                  data: {}
+                }).then(function(response) {
+                  _self.list = response.data.t;
+                });
+    }
+  },
+
+------------------------------------------------------------------------------------
+注意：
+後台接口統一以api/開頭，是為了打包後部署到服務器上的時候
+url: '/api/baseInfo/query_factory_list',也是正常的。
+
+開發時：
+後台服務器接口：http://10.244.186.86:8081/api/baseInfo/query_factory_list
+前端項目瀏覽器請求的接口：http://10.244.186.201:8080/api/baseInfo/query_factory_list     
+
+部署到服務器上：
+前端項目瀏覽器請求的接口：http://10.244.186.86:8081/api/baseInfo/query_factory_list

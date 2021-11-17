@@ -1,0 +1,32 @@
+參考網址：https://www.cnblogs.com/zzgno1/p/4184601.html
+
+<!-- 查詢程式設計郵件通知人郵件地址  -->
+<select id="queryProgramDesignEmailAddress" parameterType="java.lang.String" resultType="java.lang.String">
+	select distinct t.email from ACCOUNT_BROKEN t where t.account_name in 
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+	   #{item, jdbcType=VARCHAR}
+	</foreach>
+	and t.email is not null
+</select>
+
+<if test="spids.size()>0 " >
+        and  SPid not in
+        <foreach collection="spids" item="id" index="index"
+                 open="(" close=")" separator=",">
+          #{id}
+        </foreach>
+</if>
+
+注意：
+#{item, jdbcType=VARCHAR} 在item中要指定jdbc類型
+collection說明：
+1.要做foreach的对象，作为入参时，List<?>对象默认用list代替作为键，
+数组对象有array代替作为键，Map对象用map代替作为键。
+2.当然在作为入参时可以使用@Param("keyName")来设置键，
+设置keyName后，list,array,map将会失效。 
+3.除了入参这种情况外，还有一种作为参数对象的某个字段的时候。
+举个例子： 
+3.1如果User有属性List ids。入参是User对象，那么这个collection = "ids" 
+3.2如果User有属性Ids ids;其中Ids是个对象，Ids有个属性List id;
+入参是User对象，那么collection = "ids.id"
+上面只是举例，具体collection等于什么，就看你想对那个元素做循环。 该参数为必选。

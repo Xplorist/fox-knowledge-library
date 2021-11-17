@@ -1,0 +1,25 @@
+// 使用相對高度的例子
+BufferedImage imageIO = ImageIO.read(new File(image).toURI().toURL()); 
+int height= imageIO.getHeight(); 
+int width=imageIO.getWidth(); 
+int relativeHeight=(int)(((double)height/width)*28.5); 
+new AddDimensionedImage().addImageToSheet(2, sheet.getPhysicalNumberOfRows()-1 ,
+	sheet, sheet.createDrawingPatriarch(),
+	new File(image).toURI().toURL(), 30, relativeHeight, AddDimensionedImage.EXPAND_ROW_AND_COLUMN);
+	
+// 固定寬高的例子
+NewMouldFileBean pic_file = mainInfo.getFilePic();
+if(pic_file != null) {
+	String file_save_path = pic_file.getFile_save_path();
+	String file_save_name = pic_file.getFile_save_name();
+	try {
+		new AddDimensionedImage().addImageToSheet(0, 1,
+				sheet, sheet.createDrawingPatriarch(),
+				new File(file_save_path + File.separator + file_save_name).toURI().toURL(), 
+				40, 40, AddDimensionedImage.EXPAND_ROW_AND_COLUMN);
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}	

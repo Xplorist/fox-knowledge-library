@@ -1,0 +1,34 @@
+使用Vultr搭建Xray科学上网 
+
+①注册购买 VPS
+
+Vultr 现在正在做优惠活动：
+（使用此链接注册，新用户多得100美金活动)
+(新用户充值10美金后，额外获得100美金生效）
+
+https://www.vultr.com/?ref=8383972-6G
+
+支持支付宝购买，安全！
+性价比高，按小时收费，可更换IP！
+
+VPS 所在地推荐：冷门地区（热门地区：例如亚洲地区容易被墙）
+
+VPS 系统推荐：经过测试Vultr的VPS 最好使用Ubuntu系统（最新），
+Debian不推荐（容易安装有问题，或者安装好后 无法科学上网）
+
+如果是其他家后面的VPS自行测试！
+
+
+②   域名购买与解析
+
+https://sg.godaddy.com/zh
+
+.xyz域名约7.5元/年，非常超值
+不推荐免费域名，免费域名很难申请！
+
+
+
+③  安装代码（一键代码）Ubuntu与debian 代码通用
+
+wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/install.sh
+

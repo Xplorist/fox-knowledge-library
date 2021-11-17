@@ -1,0 +1,4 @@
+電腦不是最大權限的管理員權限，無法將DeviceLock的軟件禁用，只能夠曲線救國，把系統切換到
+Ubuntu系統下，找到c盤的相應程序，C:\Windows\System32文件夾下DLGPC1.dll，DLService1.exe，
+DLServiceMsg1.dll，DLTempAccess1.cpl，DLHooks1.DLL.0修改文件名字，就實現了禁用DevicLock
+的目的了。

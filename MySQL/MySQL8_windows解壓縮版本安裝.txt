@@ -1,0 +1,101 @@
+參考網址：https://blog.csdn.net/zwj1030711290/article/details/80039780
+
+1.解压zip包到安装目录
+
+2.配置文件
+
+在Windows系统中，配置文件默认是安装目录下的 my.ini 文件，部分配置需要在初始安装时配置，
+大部分也可以在安装完成后进行更改。当然，极端情况下，所有的都是可以更改的。
+在安装根目录下添加 my.ini，比如我这里是：D:\Program\MySQL\my.ini，写入基本配置：
+----------------------------------------------------------------------------------
+[mysqld]
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+ 
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin
+ 
+# These are commonly set, remove the # and set as required.
+basedir = D:\1ProgramInstall\mysql\mysql-8.0.13-winx64
+datadir = D:\1ProgramInstall\mysql\data\mysql-8.0.13-winx64
+port = 3306
+# server_id = .....
+ 
+ 
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M 
+ 
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES 
+ 
+character-set-server = utf8mb4
+ 
+performance_schema_max_table_instances = 600
+table_definition_cache = 400
+table_open_cache = 256
+
+default_authentication_plugin = mysql_native_password
+
+[mysql]
+default-character-set = utf8mb4
+[client]
+default-character-set = utf8mb4
+----------------------------------------------------------------------------------
+
+注意，里面的 basedir 是我本地的安装目录，datadir 是我数据库数据文件要存放的位置，
+各项配置需要根据自己的环境进行配置。
+
+查看所有的配置项，可参考：https://dev.mysql.com/doc/refman/8.0/en/mysqld-option-tables.html
+
+3.初始化數據庫
+在MySQL安装目录的 bin 目录下执行命令：
+mysqld --initialize --console
+执行完成后，会打印 root 用户的初始默认密码
+如：
+其中，第4行的“APWCY5ws&hjQ”就是初始密码，在没有更改密码前，需要记住这个密码，后续登录需要用到。
+
+要是你手贱，关快了，或者没记住，那也没事，删掉初始化的 datadir 目录，再执行一遍初始化命令，又会重新生成的。
+当然，也可以使用安全工具，强制改密码，用什么方法，自己随意。
+
+参考：https://dev.mysql.com/doc/refman/8.0/en/data-directory-initialization-mysqld.html
+
+4.安装服务
+在MySQL安装目录的 bin 目录下执行命令：
+mysqld --install [服务名]
+后面的服务名可以不写，默认的名字为 mysql。当然，如果你的电脑上需要安装多个MySQL服务，
+就可以用不同的名字区分了，比如 mysql5 和 mysql8。
+
+安装完成之后，就可以通过命令net start mysql启动MySQL的服务了。
+
+参考：https://dev.mysql.com/doc/refman/8.0/en/windows-start-service.html
+
+二.更改密码和密码认证插件
+在MySQL安装目录的 bin 目录下执行命令：
+
+mysql -uroot -p
+这时候会提示输入密码，记住了第3步的密码，填入即可登录成功，进入MySQL命令模式。
+
+在MySQL8.0.4以前，执行
+
+SET PASSWORD=PASSWORD('[修改的密码]');
+就可以更改密码，但是MySQL8.0.4开始，这样默认是不行的。因为之前，
+MySQL的密码认证插件是“mysql_native_password”，而现在使用的是“caching_sha2_password”。
+
+因为当前有很多数据库工具和链接包都不支持“caching_sha2_password”，为了方便，
+我暂时还是改回了“mysql_native_password”认证插件。
+
+在MySQL中执行命令：
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+修改密码验证插件，同时修改密码。
+
+如果想默认使用“mysql_native_password”插件认证，可以在配置文件中配置default_authentication_plugin项。
+
+[mysqld]
+default_authentication_plugin=mysql_native_password
+参考：https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password

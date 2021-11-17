@@ -1,0 +1,8 @@
+Oracle問題：
+java.sql.SQLException: ORA-06550: 第 1 行, 第 7 列:
+PLS-00905: 对象 SCOTT.QUERYEMPINFO 无效
+ORA-06550: 第 1 行, 第 7 列:
+PL/SQL: Statement ignored
+
+原因：
+存儲過程SCOTT.QUERYEMPINFO出現了問題，進入plsql中重新編譯會自動報錯

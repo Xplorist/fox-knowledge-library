@@ -1,0 +1,24 @@
+Browserify加載nodejs模塊
+
+參考網址：
+https://javascript.ruanyifeng.com/tool/browserify.html
+
+實例:
+將npm中下載的md5.js通過browserify編譯成瀏覽器能夠直接引用的js文件
+
+1.如果npm中沒有安裝browserify,先安裝browserify
+npm install -g browserify
+
+2.編寫md5.js的入口文件md5_browser_entry.js
+
+----------------------------------------
+md5_browser_entry.js內容如下：
+
+global.md5 = require('md5');
+----------------------------------------
+
+3.使用browserify編譯md5_browser_entry.js文件為md5.bundle.js
+
+4.使用js-minify工具將md5.bundle.js進行壓縮為md5.min.js
+	js-minify工具網站：
+	https://javascript-minifier.com/

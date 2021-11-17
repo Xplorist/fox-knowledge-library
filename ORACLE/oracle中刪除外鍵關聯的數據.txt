@@ -1,0 +1,14 @@
+oracle中刪除外鍵關聯的數據
+-------------------------------------------------------------------------
+--第一步：让主键失效：alter table table_name disable primary key cascade;
+
+--第二步：删除数据：delete table_name;
+
+--第三步：让主键生效：alter table table_name enable primary key;
+------------------------------------------------------------------------
+alter table PROJECT disable primary key cascade;
+
+delete PROJECT t WHERE T.name IN ('X664')
+
+alter table PROJECT enable primary key;
+------------------------------------------------------------------------

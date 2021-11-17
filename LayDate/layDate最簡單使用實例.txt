@@ -1,0 +1,19 @@
+html：
+<td>
+	需求交期<font style="color: red">*</font>
+</td>
+<td>
+	<input id="query_need_date" type="text" ng-model="query_need_date" placeholder="请选择日期" style="width: 100%; height: 24px; line-height: 22px;">
+</td>
+
+js：
+// 加載日期控件
+lay('#version').html('-v'+ laydate.v);
+laydate.render({
+  elem: '#query_need_date', 
+  format: 'yyyy/MM/dd',
+  range: true,
+  done: function(value, date, endDate) {
+	  $scope.query_need_date = value;
+  }
+});

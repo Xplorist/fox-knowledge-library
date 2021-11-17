@@ -1,0 +1,13 @@
+1.PKID 主鍵id
+2.VALID_FLAG 是否有效
+3.CREATOR 創建人
+4.CREATE_DATE 創建日期
+5.UPDATER 修改人
+6.UPDATE_DATE 修改日期
+7.STATUS 狀態
+8.LIST_ORDER 列表順序
+
+文件表常用字段
+1.FILE_ORIGIN_NAME 文件原始名稱
+2.FILE_SAVE_NAME 文件保存名稱
+3.FILE_SAVE_PATH 文件保存路徑

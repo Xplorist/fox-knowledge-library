@@ -1,0 +1,6 @@
+主表單號關聯表：AA_TEST_MAIN_BILL_NO_REL
+
+pkid         --主鍵id
+main_pkid    --主表pkid
+bill_no      --單號
+create_date  --創建時間

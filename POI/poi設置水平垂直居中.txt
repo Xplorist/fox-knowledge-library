@@ -1,0 +1,4 @@
+// 水平居中
+styleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+// 垂直居中
+styleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);

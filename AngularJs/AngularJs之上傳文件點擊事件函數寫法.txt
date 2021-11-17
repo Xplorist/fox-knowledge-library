@@ -1,0 +1,8 @@
+html：
+<input type="file" name="file" id="file" onchange="angular.element(this).scope().fileChanged(this)">
+
+js：
+$scope.fileChanged = function(obj){
+	$scope.fileName = obj.files[0].name;
+	 $scope.$apply();
+};

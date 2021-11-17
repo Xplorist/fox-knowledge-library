@@ -1,0 +1,44 @@
+//@Service("ebomService")
+//public class EBOM_ServiceImpl implements EBOM_Service {
+public class EBOM_ServiceImpl {
+	protected SqlSession sqlSession = null;
+	
+	// 初始化MyBatis變量
+	protected void initMyBatisResources() {
+		sqlSession = SqlSessionFactoryUtil.openSqlSession();
+	}
+	
+	// 關閉MyBatis變量
+	protected void closeMyBatisResources() {
+		if(sqlSession != null) {
+			sqlSession.close();
+		}
+	}
+	
+	// MyBatis模板dao
+	public String template4MyBatis() {
+		String flag = "1";
+		
+		initMyBatisResources();
+		try {
+			//EBOM_Mapper mapper = sqlSession.getMapper(EBOM_Mapper.class);
+			//List<TemplateBean> list = mapper.queryTemplatList();
+			//mapper.addTemplate();
+			sqlSession.commit();
+		} catch (Exception e) {
+			flag = "0";
+			e.printStackTrace();
+			sqlSession.rollback();
+		}
+		closeMyBatisResources();
+		
+		return flag;
+	}
+	
+	//@Override
+	public String template(String param, String userId) {
+		String flag = "1";
+		
+		return flag;
+	}
+}

@@ -1,0 +1,5 @@
+修改conf/server.xml文件
+<Host>节点中添加
+<Context path="" docBase="projectName" debug="0" reloadable="true"/>
+
+projectName 为webapps目录下的项目名

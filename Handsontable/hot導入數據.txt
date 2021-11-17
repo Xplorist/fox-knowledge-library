@@ -1,0 +1,49 @@
+var
+  container = document.getElementById('bom_table'),
+  hot;
+
+hot = new Handsontable(container, {
+  startRows: 1,
+  startCols: 14,
+  contextMenu: ['row_above', 'row_below', 'remove_row'],
+  mergeCells: false,
+  rowHeaders: true,
+  colHeaders: ['項次', '組立階次', 'HH P/N (CD)', 'REV.(CD)', 'Apple P/N', 'REV.', '用量', '單位', '單重(kg)', '類別', '英文名稱', '中文名稱', '制程DRI(CD)', '備注'],
+  dataSchema: {
+	  item_no:null,
+	  group_stage:null,
+	  hh_pn:null,
+	  hh_ver:null,
+	  customer_pn:null,
+	  customer_ver:null,
+	  use_amount:null,
+	  unit:null,
+	  single_weight:null,
+	  category:null,
+	  name_en:null,
+	  name_cn:null,
+	  process_dri:null,
+	  memo:null
+	 },
+  columns: [
+	  {data: 'item_no'},
+	  {data: 'group_stage'},
+	  {data: 'hh_pn'},
+	  {data: 'hh_ver'},
+	  {data: 'customer_pn'},
+	  {data: 'customer_ver'},
+	  {data: 'use_amount'},
+	  {data: 'unit'},
+	  {data: 'single_weight'},
+	  {data: 'category'},
+	  {data: 'name_en'},
+	  {data: 'name_cn'},
+	  {data: 'process_dri'},
+	  {data: 'memo'},
+  ],
+  licenseKey: 'non-commercial-and-evaluation'
+});
+
+hot.loadData(result.item_list); 
+
+關鍵在於dataSchema屬性和columns屬性，省去了後台傳遞到前端后將list數據轉換成二維數組

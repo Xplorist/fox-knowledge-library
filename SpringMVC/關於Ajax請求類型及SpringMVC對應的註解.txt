@@ -1,0 +1,12 @@
+參考網址：https://www.jianshu.com/p/042632dec9fb
+
+axios的请求的请求头详情，发现Request-Headers的Content-Type是application/json;charset=UTF-8，
+Request Payload为
+{username: "admin", password: "admin"}
+
+jquery的ajax的Request-Headers的Content-Type是application/x-www-form-urlencoded;charset=UTF-8，
+URL encode为
+username=admin&password=admin
+
+application/json                    ------@RequestBody
+application/x-www-form-urlencoded   ------@RequestParam

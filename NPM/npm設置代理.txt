@@ -1,0 +1,11 @@
+npm設置代理：
+npm config set proxy=http://10.244.186.81:8088
+
+-------------------------------------------------------
+npm設置鏡像：
+npm config set registry=http://registry.npmjs.org
+
+-------------------------------------------------------
+npm取消代理：
+npm config delete proxy
+npm config delete https-proxy

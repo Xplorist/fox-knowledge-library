@@ -1,0 +1,6 @@
+js:
+document.getElementById("bom_table").scrollTop = 1000;
+
+jquery:
+1. $('#bom_table').animate({scrollTop: 1000}, 80);// 80是速度
+2. $('#bom_table').scrollTop(1000);

@@ -1,0 +1,42 @@
+一般input框的回車事件用onkeyup,將輸入完成的文字通過回車傳遞到js中進行處理。
+
+<input type="text" οnkeyup="inputKeyUp(event)" />
+
+function inputKeyUp(event) {
+	if(event.keyCode == 13) {
+		// 相應的處理代碼
+	}
+}
+
+----------------------------------------------------------------------------------
+
+一、msdn上关于三者的说明
+onkeydown
+
+这个事件在用户按下任何键盘键（包括系统按钮，如箭头键和功能键）时发生。
+
+onkeypress
+
+这个事件在用户按下并放开任何字母数字键时发生。
+系统按钮（例如，箭头键和功能键）无法得到识别。
+
+onkeyup
+
+这个事件在用户放开任何先前按下的键盘键时发生.
+
+二、区别
+关于执行顺序
+
+测试发现onkeydown 事件最先执行，其次是onkeypress,最后是onkeyup；
+onkeydown 和onkeypress会影响onkeyup的执行。
+三个事件同事在的话，都是alert的话，只会弹出2个alert，up事件的alert不会弹出。
+
+关于事件响应
+
+onkeydown 、onkeypress事件响应的时候输入的字符并没有被系统接受，而响应onkeyup的时候，
+输入流已经被系统接受。
+
+onkeydown 触发的时候输入流正要进入系统，也就是说onkeydown 事件一完，
+输入流就进入了系统，无法改变。所以通过onkeydown 事件可以改变用户是按了哪个键；
+而onkeypress事件则是在输入流进入系统后触发的，
+但输入流暂未被系统处理，此时已经不能改变输入流了；onkeyup则是输入流被系统处理后发生的。

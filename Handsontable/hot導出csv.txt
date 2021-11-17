@@ -1,0 +1,15 @@
+// 導出excel
+function exportExcel() {
+	hot.getPlugin('exportFile').downloadFile('csv', {
+      bom: true,
+      columnDelimiter: ',',
+      columnHeaders: true,
+      rowHeaders: false,
+      exportHiddenColumns: true,
+      exportHiddenRows: true,
+      fileExtension: 'csv',
+      filename: 'Handsontable-CSV-file_[YYYY]-[MM]-[DD]',
+      mimeType: 'text/csv',
+      rowDelimiter: '\r\n'
+    });
+}

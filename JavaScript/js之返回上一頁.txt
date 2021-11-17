@@ -1,0 +1,6 @@
+window.history.go(-1);
+or
+window.history.back();
+
+<a href="javascript:history.go(-1)"></a>
+<a href="javascript:history.back()"></a>

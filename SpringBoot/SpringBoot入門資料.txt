@@ -1,0 +1,16 @@
+參考網址：
+1.
+GitHub上的入門資料
+https://github.com/yizhiwazi/springboot-socks
+
+2.
+知乎的一篇SpringBoot和MyBatis整合，主要關注于去xml化
+https://zhuanlan.zhihu.com/p/31015559
+
+3.
+CSDN上的一篇關於SpringBoot中使用xml的MyBatis的文章
+https://blog.csdn.net/qq_33337504/article/details/78460383
+
+4.
+簡書上SpringBoot集成MyBatis（XML）
+https://www.jianshu.com/p/f7bed4488580

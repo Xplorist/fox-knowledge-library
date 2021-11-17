@@ -1,0 +1,9 @@
+<table class="table table-bordered">
+ <tr ng-repeat-start="p in products">
+  <td></td>
+  <td rowspan="2"><a href="#">Buy</a></td>
+ </tr>
+ <tr ng-repeat-end>
+  <td></td>
+ </tr>
+</table>

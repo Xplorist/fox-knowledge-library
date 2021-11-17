@@ -1,0 +1,7 @@
+單號表：AA_TEST_BILL_NO
+
+pkid           --主鍵id
+bill_no        --單號
+rpt_type_no    --報告編號
+create_date    --創建日期
+project_name   --專案名稱

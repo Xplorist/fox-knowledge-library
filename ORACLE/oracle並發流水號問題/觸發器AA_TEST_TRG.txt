@@ -1,0 +1,12 @@
+create or replace trigger AA_TEST_TRG
+  after insert on aa_test_main
+  for each row
+
+declare
+  -- local variables here
+begin
+  AA_TEST_PCD(:new.pkid,
+              :new.rpt_type_no,
+              :new.project_name,
+              :new.factory_zone);
+end AA_TEST_TRG;

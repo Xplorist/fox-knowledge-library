@@ -1,0 +1,12 @@
+UML類圖基本知識
+
+參考網址：
+https://design-patterns.readthedocs.io/zh_CN/latest/read_uml.html
+
+類之間的關係：
+1.繼承關係
+	細分為： 1.實現繼承（realize）  2.泛化繼承(generalization)
+2.組合關係(composition) 
+3.聚合關係(aggregation) 
+4.關聯關係(association)
+5.依賴關係(dependency)

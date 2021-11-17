@@ -1,0 +1,104 @@
+參考網址：
+https://www.itread01.com/p/1403779.html
+
+1. 為什麼沒有註釋
+
+    在 pdm 檢視中,預設 powerdesigner 是不會生成註釋的。
+
+ 
+
+2. 解決方案
+
+    可以修改 mysql 檔案生成模版來達到我們所需要的效果。
+
+ 
+
+3. 生成註釋
+
+    在 pdm 檢視中,Database --> Edit Current DBMS。
+
+    找到 MySql5.0 --> Script --> Objects --> Column --> Add。
+
+  a) 原來的內容
+
+Xml程式碼     
+%20:COLUMN% [%National%?national ]%DATATYPE%[%Unsigned%?  
+unsigned][%ZeroFill%? zerofill][ [.O:[character  
+set][charset]] %CharSet%][.Z:[ %NOTNULL%][%IDENTITY%?  
+auto_increment:[ default %DEFAULT%]][ comment %.q:@OBJTLABL  
+%]]  
+ 
+
+    b) 修改後的內容
+
+Xml程式碼     
+%20:COLUMN% [%National%?national ]%DATATYPE%[%Unsigned%?  
+unsigned][%ZeroFill%? zerofill][ [.O:[character  
+set][charset]] %CharSet%][.Z:[ %NOTNULL%][%IDENTITY%?  
+auto_increment:[ default %DEFAULT%]][ comment %.q:COMMENT%]  
+]  
+ 
+
+    c) 實際改動地方
+
+          最後的@OBJTLABL 改為 COMMENT 就行了。
+
+ 
+
+    d) 程式碼生成
+
+          Database --> Generate Database。
+
+          在 Format 頁中,勾選 Generate name in empty comment單擊確定就可以生成相應的程式碼,
+
+          程式碼中就會出現上面的註釋了。
+		  
+4. 去除註釋
+
+    生成 SQL 檔案時也包含了這些 comment,但是用這 SQL 檔案生成資料庫時,
+
+    經常會因為 comment 太長而失敗,在檔案中一點一點的刪除 comment 未免太麻煩。
+
+ 
+
+    a) 去掉建立表的 comment
+
+           DataBase --> Edit Current DBMS,依次點開 Script --> Objects --> Table --> Create。
+
+           在 value 中將最後的[comment = "%TLABL%"]刪除。
+		   
+   b) 去掉 column 的 comment
+
+           Script --> Objects --> Column --> Create,在 value 中,
+
+           將最後的[ comment %.q:@OBJTLABL%]刪除。
+	5. 注意事項
+
+ 
+
+    a) index
+
+           如果資料庫設計中有 index,生成 SQL 檔案時會把 drop index 放到檔案的最前面,
+
+           當第一次生成資料庫時,由於沒有 index 所以會報錯,因此要把最前面的 dropindex 刪掉,
+
+           但手動刪除還是麻煩,可以這樣:
+
+           CTRL + G,開啟 Database Generation,選擇 Options 選項卡,選擇 Index,
+
+           把右邊的 Drop index 前的√去掉就行了。
+
+	  b) 表的註釋
+
+          有些 powerdesigner 版本按照上面的步驟修改後,還是沒有註釋生成,
+
+          是因為沒有表的註釋設定緣故。
+
+          DataBase --> Edit Current DBMS,找到 Mysql5.0 --> Script --> Objects
+
+          --> Table --> TableComment。
+
+          Value 中,增加如下內容:
+
+Xml程式碼     
+alter table [%QUALIFIER%]%TABLE% comment %.60qA:COMMENT%    

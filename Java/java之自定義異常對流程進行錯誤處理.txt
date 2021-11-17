@@ -1,0 +1,24 @@
+result = "1";
+try {
+	// 流程代碼
+	dfmFilePkid = newMouldDrawUpload(dfmFile, "dfm", dfmFileFileName);
+	
+	// 判斷代碼
+	if(groupFilePkid == null) 
+			|| (dfmFile != null && dfmFilePkid == null)) {
+		throw new Exception("addSave is failed");
+	}
+} catch (Exception e) {
+	result = "0";
+	e.printStackTrace();
+}
+return result;
+
+通過判斷標誌主動拋出異常從而得出流程正常執行還是出現了異常。
+
+java中try / catch 代碼塊中遇到異常後，try/catch後面的代碼還能夠繼續執行。
+如果是直接拋出異常throw new Exception("addSave is failed");
+整個程序就終止了。
+注意：
+try/catch不能亂寫，如果某個異常對流程的影響不大，不需要將整個流程進行終止，
+才用try/catch。一般情況下都直接將異常往上拋就行了，還能夠減少異常處理代碼。

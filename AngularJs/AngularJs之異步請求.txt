@@ -1,0 +1,15 @@
+$http({
+	method: "POST",
+	url: "xxx!xxx.action",
+	headers: {
+		'Content-Type': 'application/json'
+	},
+	data: {
+		'xxx' : xxx
+	}
+}).then(function successCallBack(response) {
+	alert(response.data.xxx);
+},function errorCallBack(error){
+	console.log(error);
+	alert("請求失敗！");
+});

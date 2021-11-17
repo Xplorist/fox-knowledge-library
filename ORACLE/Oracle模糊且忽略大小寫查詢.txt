@@ -1,0 +1,4 @@
+select * from table t where upper(t.name) like upper('%input%');--将字段和輸入全转成大写
+ 或者
+select * from table t where lower(t.name) like lower('%input%');  --将字段和輸入全转成小写
+ 

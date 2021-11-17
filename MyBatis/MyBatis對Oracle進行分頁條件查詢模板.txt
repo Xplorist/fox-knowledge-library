@@ -1,0 +1,41 @@
+ <!-- 查詢主表數據list -->
+ <select id="queryBaseInfoList" parameterType="com.foxconn.SpringMVCx.ESOP.dto.QueryBaseInfoDTO" resultType="com.foxconn.SpringMVCx.ESOP.model.ESOP_BaseInfo_Main">
+	select t2.* from(select t1.*,rownum row_num from(
+		select t.*, count(*) over() row_total, a.person_name creator_name
+	  from SOP_BASEINFO_MAIN t, ACCOUNT_BROKEN a
+	 where t.is_use = 'Y' and t.creator = a.account_name
+	   and t.is_new_ver = 'Y'
+	 <if test='project_id != "" and project_id != null'>
+		<bind name="projectId" value="'%'+ project_id +'%'"/>
+	   and t.project_id like #{projectId}
+	 </if>
+	 <if test='phase_id != "" and phase_id != null'>
+		<bind name="phaseId" value="'%'+ phase_id +'%'"/>
+	   and t.phase_id like #{phaseId}
+	 </if>
+	 <if test='title != "" and title != null'>
+		<bind name="p_title" value="'%'+ title +'%'"/>
+	   and t.title like #{p_title}
+	 </if>
+	 <if test='material_no != "" and material_no != null'>
+		<bind name="materialNo" value="'%'+ material_no +'%'"/>
+	   and t.material_no like #{materialNo}
+	 </if>
+	 <if test='workstation != "" and workstation != null'>
+		<bind name="p_workstation" value="'%'+ workstation +'%'"/>
+	   and t.workstation like #{p_workstation}
+	 </if>
+	 <if test='apply_state != "" and apply_state != null'>
+		<bind name="applyState" value="'%'+ apply_state +'%'"/>
+	   and t.apply_state like #{applyState}
+	 </if>
+	 <if test='creator_name != "" and creator_name != null'>
+		<bind name="creatorName" value="'%'+ creator_name +'%'"/>
+	   and a.person_name like #{creatorName}	
+	 </if>
+	 <if test='start_date != "" and start_date != null and end_date != "" and end_date != null'>
+	   and t.create_date &gt;= to_date(#{start_date}, 'yyyy/mm/dd') and t.create_date &lt;= to_date(#{end_date}, 'yyyy/mm/dd')
+	 </if>
+	 order by t.create_date desc) t1) t2 
+	 where t2.row_num between (#{pageIndex} - 1) * #{pageSize} + 1 and #{pageIndex} * #{pageSize}
+ </select>

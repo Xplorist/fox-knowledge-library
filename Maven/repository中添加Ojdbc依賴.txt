@@ -1,0 +1,8 @@
+參考網址：
+https://www.mkyong.com/maven/how-to-add-oracle-jdbc-driver-in-your-maven-local-repository/
+
+1.到oracle官網下載相應版本的Ojdbc jar
+2.將下載好的ojdbc.jar文件放在指定位置
+3.在剛才的指定位置下打開cmd，并運行以下指令
+  $ mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0 -Dpackaging=jar
+4.到你的maven本地倉庫去尋找相應的ojdbc6.jar文件，現在pom.xml中可以使用ojdbc6的依賴了。

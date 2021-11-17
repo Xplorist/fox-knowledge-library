@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 精密組件量測 -->
+	<package name="part_measure" namespace="/part_measure" extends="json-default">
+		<interceptors>
+			<interceptor-stack name="defaultStack">
+				<interceptor-ref name="json">
+					<param name="enableSMD">true</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="defaultStack" />
+
+		<!-- 量測申請單基本資料 -->
+		<action name="BasicInfoAction" class="com.partsMeasurePage.action.BasicInfoAction">
+			<result type="json" />
+			<allowed-methods>*</allowed-methods>
+		</action>
+
+		<!-- 量測申請 -->
+		<action name="MesureBillApplyAction"
+			class="com.partsMeasurePage.action.MesureBillApplyAction">
+			<result type="json" />
+			<allowed-methods>*</allowed-methods>
+		</action>
+
+		<!-- 量測申請送檢確認 -->
+		<action name="PartsMeasureSjEnsureAction"
+			class="com.partsMeasurePage.action.PartsMeasureSjEnsureAction">
+			<result type="json" />
+			<allowed-methods>*</allowed-methods>
+		</action>
+	</package>
+	
+	<!-- 專門用於處理文件上傳下載的package -->
+	<package name="FileUpDown" extends="json-default">
+		<!-- 文件上傳 -->
+		<action name="FileUploadAction"
+			class="com.partsMeasurePage.action.FileUploadAction">
+			<result type="json" name="success">
+				<param name="contentType">text/html</param>
+			</result>
+		</action>
+		
+		<!-- 文件下載 -->
+		<action name="FileDownloadAction"
+			class="com.partsMeasurePage.action.FileDownloadAction">
+			<result name="success" type="stream">
+				<!-- attachment表示附件方式，即下载时打开保存对话窗，filename表示下载时显示的保存时的文件名 -->
+				<param name="contentType">application/octet-stream; charset=utf-8</param>
+				<param name="contentDisposition">attachment; filename="${fileName}";
+					filename*=utf-8''${fileName}</param>
+				<param name="inputName">downfile</param>
+			</result>
+		</action>
+	</package>
+
+</struts>

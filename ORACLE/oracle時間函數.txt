@@ -1,0 +1,34 @@
+
+--取得当天0时0分0秒
+select TRUNC(SYSDATE) FROM dual;
+
+--取得当天23时59分59秒(在当天0时0分0秒的基础上加1天后再减1秒)
+SELECT TRUNC(SYSDATE)+1-1/86400 FROM dual;
+
+--取得当前日期是一个星期中的第几天,注意：星期日是第一天
+select to_char(sysdate,'D'),to_char(sysdate,'DAY') from dual;
+
+--在oracle中如何得到当天月份的第一天和最后一天
+select to_char(sysdate,'yyyy-mm')||'-01' firstday,to_char(last_day(sysdate),'yyyy-mm-dd') lastday from dual
+
+--实现当天16点前数据减去昨天16点的，过了16点减去今天16点
+select field1, field2 from mytable
+where time = decode(sign(sysdate-trunc(sysdate)-16/24), --时间判断
+                     -1,trunc(sysdate)-1+16/24, --小于16点取昨天16点
+                        trunc(sysdate)+16/24)  --大于16点取当天16点 
+
+------------------------------------------------------------------------------------------------------------------------------------------------						
+--時間比較
+createtime >to_date( ''2006-04-08 00:00:01','yyyy-mm-dd hh24:mi:ss') and createtime<to_date(''2006-04-08 10:00:01','yyyy-mm-dd hh24:mi:ss')或者
+
+createtime >to_date( ''20060408000001','yyyymmddhh24miss') and createtime<to_date(''20060408100001','yyyymmddhh24miss')
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+timestamp類型 和 date類型
+
+获得当前时间：
+select sysdate from dual; 		--date類型
+select systimestamp from dual;	--timestamp類型
+
+timestamp to date:(隐式转换)
+select systimestamp+0 from dual;

@@ -1,0 +1,43 @@
+hot.selectRows(300);
+hot.scrollViewportTo(305, 5, true, true);
+
+-------------------------------------------------------------------------------
+selectRows(startRow, endRow){Boolean}
+Select row specified by startRow visual index or a range of rows finishing at endRow.
+
+PARAMETERS:
+Name	Type	Default	Description
+startRow	Number		
+The visual row index from which the selection starts.
+
+endRow	Number	startRow	optional
+The visual row index to which the selection finishes. If endRow
+is not defined the row defined by startRow will be selected.
+
+Since: 0.38.0
+Returns: {Boolean} true if selection was successful, false otherwise.
+Example
+// Select row using visual index.
+hot.selectRows(1);
+// Select range of rows using visual indexes.
+hot.selectRows(1, 4);
+
+-------------------------------------------------------------------------------
+scrollViewportTo(row, column, snapToBottom, snapToRight){Boolean}
+Scroll viewport to coordinates specified by the row and column arguments.
+
+PARAMETERS:
+Name	Type	Default	Description
+row	Number		optional
+Visual row index.
+
+column	Number		optional
+Visual column index.
+
+snapToBottom	Boolean	false	optional
+If true, viewport is scrolled to show the cell on the bottom of the table.
+
+snapToRight	Boolean	false	optional
+If true, viewport is scrolled to show the cell on the right side of the table.
+
+Returns: {Boolean} true if scroll was successful, false otherwise.

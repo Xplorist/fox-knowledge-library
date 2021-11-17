@@ -1,0 +1,38 @@
+$.ajax({
+	url : "xxx!xx.action",
+	data : {
+		'xxx' : 'xxxx'
+	},
+	dataType : 'json',
+	type : 'post',
+	async : true,
+	error : function(XMLHttpRequest, textStatus, errorThrown) {
+		console.log(textStatus);
+		alert("請求失敗");
+	},
+	success : function(response) {
+		alert(response);
+	}
+});
+
+
+jquery 前台
+
+$.ajax({
+        dataType: "JSON",
+        contentType:'application/json;charset=UTF-8',//关键是要加上这行
+        traditional:true,//这使json格式的字符不会被转码
+        data: JSON.stringify(parms),
+        type: "DELETE", 
+        timeout: 20000,
+        url: url,
+        success : function () {
+            alert("删除成功！");
+        },
+        error : function (data){
+            alert(data.responseText);
+        }
+    });	
+	
+java後台 SpringMVC使用@RequestBody 接收
+關鍵在於 data: JSON.stringify(parms),

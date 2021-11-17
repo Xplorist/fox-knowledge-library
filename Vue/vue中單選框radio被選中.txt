@@ -1,0 +1,5 @@
+vue中單選框radio被選中
+
+<input type="radio" v-bind:value="x.pkid" v-model="dept_no_selected"/>
+
+如果value的值和model的值相同，單選就自動被選中。

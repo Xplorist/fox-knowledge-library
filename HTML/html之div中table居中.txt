@@ -1,0 +1,10 @@
+有时候在Div中加上 <div style="text-align:center"></div>里面的Table是不会居中的
+我们可以在Table中加上 margin:auto比如：
+
+<div style="text-align:center">              
+    <table border="1" cellpadding="3" cellspacing="0" style="width: 60%;margin:auto">
+         <tr>
+			<td></td>                                                                                  
+		</tr>
+	</table>
+</div>

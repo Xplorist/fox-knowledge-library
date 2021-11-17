@@ -1,0 +1,14 @@
+參考網址：
+https://www.jianshu.com/p/676de1ec8852
+
+1 file --> setting --> Build,Execution... --> Compiler中设置自动编译
+選中build project automatically
+
+2 按住ctrl + shift + alt + /，并选择register进入设置页面如下设置：
+選中compiler.automake.allow.when.app.running
+
+
+後台也熱更新參考下面的網址
+參考網址：
+https://blog.csdn.net/qq_42685050/article/details/81588584
+

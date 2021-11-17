@@ -1,0 +1,2 @@
+AndroidStudio默認Sdk位置：
+C:\Users\mcebgadmin\AppData\Local\Android\Sdk

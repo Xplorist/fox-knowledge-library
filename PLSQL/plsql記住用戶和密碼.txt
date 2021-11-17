@@ -1,0 +1,12 @@
+1 保存用户名
+
+tools -> Preferences -> User Interface - Options
+
+勾选 Autosave username ，保存即可。
+
+
+
+2 保存密码
+
+1. tools -> Preferences -> Oracle -> logon History-> Store with password
+2. tools -> Preferences -> Oracle -> Connection-> Store with password

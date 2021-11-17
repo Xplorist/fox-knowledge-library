@@ -1,0 +1,13 @@
+update file_manage_customfile t
+   set t.customtype =
+       (select substr(f.customfile, instr(t.customfile, '.', -1, 1) + 1)
+          from file_manage_customfile f
+         where f.id = 'F6DD96CA3DB7498DBFCB5E427135CE75')
+ where t.id = 'F6DD96CA3DB7498DBFCB5E427135CE75'
+ 
+ substr(x, y, z)用於截取字符串，第2個參數表示起始位置（負數表示倒數第個位置），
+ 第3個參數表示截取長度（如果沒有第3個參數，默認從開始到字符串末尾）
+ 
+ instr(a, b, c, d)用於定位字符位置,第3個參數為負數表示倒數第幾個位置
+ （ -1表示從倒數第一個開始查），第4個參數表示第几次出現（一般為1）
+ 

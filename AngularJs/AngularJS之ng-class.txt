@@ -1,0 +1,1 @@
+ng-class="{'hsf_gray':reportData.status_no!='MR_S2','hsf_red':reportData.status_no=='MR_S2'}"

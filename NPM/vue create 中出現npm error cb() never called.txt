@@ -1,0 +1,9 @@
+vue create 中出現npm error cb() never called
+
+參考網址：
+https://github.com/vuejs/vue-cli/issues/1176
+
+解決辦法：
+win7系統找打文件夾：
+C:\Users\mcebgadmin\AppData\Roaming\npm-cache
+清楚文件夾中的所有文件，再重新使用vue create 創建項目。

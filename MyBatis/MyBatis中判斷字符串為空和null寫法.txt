@@ -1,0 +1,3 @@
+<if test='pre_ver_id == null or pre_ver_id == ""'>
+
+關鍵在於""和''的區別

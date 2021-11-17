@@ -1,0 +1,88 @@
+針對url中的中文亂碼
+
+前台js代碼
+encodeURI(response.data);
+alert("1"+decodeURI(response.data));
+alert("2"+decodeURIComponent(response.data));
+--------------------------------------------------------------
+java後台代碼：
+URLEncoder.encode(name+suffix, "UTF-8");
+java後台解碼：
+URLDecoder.decode(subname, "UTF-8");
+---------------------------------------------------------------
+後台加密并對空格進行替換：
+URLEncoder.encode(name+suffix, "UTF-8").replace("+", "%20");
+前台解密：
+decodeURIComponent(response.data);
+---------------------------------------------------------------
+關於在html之間傳值的中文亂碼問題
+1.两次编码 两次解码
+$scope.getUrlParam = function(param) {
+	var reg = new RegExp("(^|&)" + param + "=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return unescape(r[2]);
+	return null;
+}
+获取参数时用的是unescape()函数
+
+發送頁面需要進行兩次加密：encodeURIComponent(encodeURIComponent($scope.projectName))
+接收頁面一次解碼：        decodeURIComponent($scope.getUrlParam("projectName"))
+
+或者
+2.单次编码 单次解码
+$scope.getUrlParam = function(param) {
+	var reg = new RegExp("(^|&)" + param + "=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return decodeURIComponent(r[2]);
+	return null;
+}
+获取参数时用的是decodeURIComponent()函数
+
+发送页面编码一次：encodeURIComponent($scope.projectName);
+接收页面不解码：$scope.getUrlParam("projectName")
+
+原理参考（不一定正确）：
+1. 初次编码, javascript中利用encodeURI()方法进行编码。
+   利用encodeURI()在javascript中对中文URL参数进行编码时，“测试”二字会被转换为“%E6%B5%8B%E8%AF%95”。 但是问题依然存在。原因是在编码后的字符串信息，浏览器机制会认为“%”是一个转义字符，
+   浏览器会把地址栏URL中的传递的已转换参数“%”与“%”之间的已转义字符进行处理传递到后台中。这样会造成与实际经过 encodeURI()编码后的URL不符，因为浏览器误认为“%”是转义字符字符了，它并未将“%”认为是个普通字符。
+2. 二次编码，使用encodeURI
+   操作：   encodeURI( encodeURI( "/order?name=" + name));
+   处理后的URL不在是通过一次   encodeURI()转换后的字符串” %E6%B5%8B%E8%AF%95 “，而是经过上一步两层 encodeURI()处理URL处理后的字符串”%25E6%B255%258B%25E8%AF%2595 “，通过再次编码原有被浏览起解析为转义字符的”%“被再次编码，转换成了普通字符转”%25“。
+      此时前端javascript代码对带有中文的URL编码已经完成，并通过URL传递参数的方式传递到后台等待处理，Action获取到正常转换切无乱码的参数为”%25E6%B255%258B%25E8%AF%2595“，此字符串对应的中文正是我们输入的”测试“二字。
+---------------------------------------------------------------
+javascript中的编码有三种方法:escape （不推荐，对ASCII符号正确编码）、encodeURI、encodeURIComponent
+
+1.escape （不推荐，对ASCII符号正确编码）
+2.encodeURI：用于对网址编码(不包含参数)
+3.encodeURIComponent:用于对网址参数进行编码
+---------------------------------------------------------------
+
+encodeURI：用于对网址编码(不包含参数)
+
+　　　　encodeURI不编码字符有82个：!，#，$，&，'，(，)，*，+，,，-，.，/，:，;，=，?，@，_，~，0-9，a-z，A-Z
+
+　　　　encodeURI就是为这个而设计的。encodeURI不对URI中的特殊字符进行编码，如冒号(:)、斜杠(/)。下面看个示例：
+
+encodeURI("http://www.cnblogs.com/a file with spaces.html")
+// outputs http://www.cnblogs.com/a%20file%20with%20spaces.html
+　　　　可以看到仅仅把空格替换成了20%，所以此方法可用于对网址进行编码。
+
+　　　　由于encodeURI不对冒号(:)、斜杠(/)进行编码，所以如果参数(如把网址作为参数)中包含冒号(:)、斜杠(/)，就会解析出错，所以此方法不能对参数进行编码。
+
+ 
+encodeURIComponent:用于对网址参数进行编码
+
+　　　　encodeURIComponent不编码字符有71个：!， '，(，)，*，-，.，_，~，0-9，a-z，A-Z
+
+　　　　可以看到此方法对:/都进行了编码，所以不能用它来对网址进行编码。由于此方法对中文，空格，井号(#)，斜线(/)，冒号(:)都进行了编码，所以适合对URI中的参数进行编码。看下面的示例：
+
+var param="博客园";
+var url="http://www.cnblogs.com/?key="+encodeURIComponent(param)+"&page=1";
+console.log(url);//outputs http://www.cnblogs.com/?key=%E5%8D%9A%E5%AE%A2%E5%9B%AD&page=1
+
+
+****
+
+# 参考网址
+
+> * [URL地址中的中文乱码问题的解决](https://blog.csdn.net/blueheart20/article/details/43766713)

@@ -1,0 +1,2 @@
+直接到marketPlace中去搜索JbossTools下載，在安裝的時候只選擇安裝
+JBoss AS, WildFly & EAP Server Tools 就行了，快捷省事。

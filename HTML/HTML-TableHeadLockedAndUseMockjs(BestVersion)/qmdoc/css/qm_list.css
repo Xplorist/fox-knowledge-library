@@ -1,0 +1,116 @@
+#app {
+	display: flex;
+	flex-direction: column;
+	width: 99vw;
+	height: 98vh;
+}
+
+div {
+	border: 0.00625rem solid #DDDDDD;
+	background-color: #F5F5F5;
+}
+
+input {
+	width: 99%;
+}
+
+.text-center {
+	text-align: center;
+}
+
+#query_content {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+#query_content .query_content_box {
+	flex-basis: 33.33%;
+}
+
+.query_content_box {
+	display: flex;
+}
+
+.query_content_box_input {
+	flex-grow: 1;
+}
+
+#query_condition_button {
+	display: flex;
+	justify-content: center;
+}
+
+#table_cont {
+	overflow: auto; 
+	width: 100%; 
+	height: 60vh;
+}
+
+td {
+	text-align: center;
+	background-color: #fff;
+}
+
+th {
+	background-color: #E0FFFF;
+}
+
+/* border-collapse为separate;的原因：表头固定中用到了CSS3中的translate属性，如果是collapse的话，translate平移后会导致表格边框线丢失，separate可以避免这个问题 */
+/* separate虽然避免了表格边框线丢失，但是每个框线会有很大的空隙，border-spacing: 0rem;就是把边框间的空隙消除了，但是每个边框是两个格子的边框，比如上面的格子的下边框其实是自己的下边框和下面格子的上边框两个边框线，所以看上去很粗 */
+/* 边框很粗的解决办法：下面的.table-bordered th和.table-bordered td加上.thead_top_left_first_col和.tbody_left_first_col一起就能够把边框变成单边框线了 */
+.table {
+	width: 100%;
+	max-width: 100%;
+	/* margin-bottom: 20px; */
+    /* border-collapse: collapse !importantborder-spacing: 0rem;; */
+	border-collapse: separate;
+	border-spacing: 0rem;
+	white-space: nowrap;
+}
+  
+/* .table td,.table th {
+	background-color: #fff !important;
+} */
+
+/* 表头各边框线，无左框线【解决border-collapse: separate;border-spacing: 0rem;后边框线变粗（变成了两倍边框）的必须方案，不能删除或修改】 */
+.table-bordered th {
+	border-top: 0.00625rem solid #ddd;
+	border-bottom: 0.00625rem solid #ddd;
+	border-left: 0rem solid #ddd;
+	border-right: 0.00625rem solid #ddd;
+}
+
+/* 表体各框线，无顶框线，无左框线【解决border-collapse: separate;border-spacing: 0rem;后边框线变粗（变成了两倍边框）的必须方案，不能删除或修改】 */
+.table-bordered td {
+	border-top: 0rem solid #ddd;
+	border-bottom: 0.00625rem solid #ddd;
+	border-left: 0rem solid #ddd;
+	border-right: 0.00625rem solid #ddd;
+}
+
+/* 表头左上角固定位置 */
+.thead_top_left {
+	background-color: #F0FFF0;
+}
+
+/* 表头行固定位置 */
+.thead_top {
+	background-color: #E0FFFF;
+}
+
+/* 表体左列固定位置 */
+.tbody_left {
+	background-color: #FAFAD2;
+}
+
+/* 表头最左边第一列的格子的左框线【解决border-collapse: separate;border-spacing: 0rem;后边框线变粗（变成了两倍边框）的必须方案，不能删除或修改】 */
+.thead_top_left_first_col {
+	border-left: 0.00625rem solid #ddd !important;
+}
+
+/* 表体最左边第一列的格子的左框线【解决border-collapse: separate;border-spacing: 0rem;后边框线变粗（变成了两倍边框）的必须方案，不能删除或修改】 */
+.tbody_left_first_col {
+	border-left: 0.00625rem solid #ddd !important;
+}
+

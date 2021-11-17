@@ -1,0 +1,13 @@
+利用sizeof函数获取数组行列的长度。例如定义一个二维数组：arraryTest[2][3];
+
+arrary[2][3];
+ 
+sizeof(arrary);  /*整个二維数组所占的空間*/
+ 
+sizeof(arrary[0]);  /*二維数组一行元素所占的空间*/
+ 
+sizeof(arrary)/sizeof(arrary[0])  /*二維数组的行数*/
+ 
+sizeof(arrary[0][0]);  /*二維数组中每个元素所占的空间*/
+
+sizeof(arrary[0])/sizeof(arrary[0][0])  /*也可用此方法求得列数*/

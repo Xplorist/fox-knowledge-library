@@ -1,0 +1,86 @@
+注意：
+1.table需要添加border-collapse: separate;屬性，不然會移動后的表頭和固定列會丟失邊界線border
+ <table style="border-collapse: separate;">
+2.需要在html代碼中將thead放在tbody下方，不然固定列會浮動在表頭左上角的上方
+<table style="border-collapse: separate;">
+	<tbody>
+		<tr>
+			<th></th>
+		</tr>
+	</tbody>
+	<thead>
+		<tr>
+			<td></td>
+		</tr>
+	</thead>
+</table>
+解釋： 因為transform的特性，元素在使用了transform会创建更高层级的stacking context（堆叠上下文），
+所以z-index会失效，解決固定列浮動在表頭上方的解決辦法就是這樣將tbody放在thead之上，具體原因不清楚，
+反正誤打誤撞就實現了。
+3.在使用bootstrap 的table-bordered的class時會出現表頭的上方和固定列的左側出現透明的空隙
+解決辦法：使用table-bordered-xbr去替代，
+代碼如下：
+.table-bordered-xbr td,th {
+	border: 1px solid #ddd !important;
+	padding: 2px 2px;
+	text-align: center;
+	vertical-align: middle !important;
+	height: 50px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size:13px;
+}
+
+<table class="table table-bordered-xbr table-hover" style="border-collapse: separate;">
+	<tbody>
+		<tr>
+			<th></th>
+		</tr>
+	</tbody>
+	<thead>
+		<tr>
+			<td></td>
+		</tr>
+	</thead>
+</table>
+
+css:
+/* 表頭左上角固定位置 */
+.thead_top_left {
+	background-color: #f8f0d0;
+}
+
+/* 表頭行固定位置 */
+.thead_top {
+	background-color: #f8f0d0;
+}
+
+/* 表體左列固定位置 */
+.tbody_left {
+	background-color: white;
+}
+
+js:
+<script>
+    window.onload = function(){
+        var tableCont = document.querySelector('#table_cont');// #table-cont為包含table的div
+        function scrollHandle (e) {
+            var scrollTop = this.scrollTop;
+			var scrollLeft = this.scrollLeft;
+			this.querySelector('thead').style.transform = 'translateY(' + scrollTop + 'px)';
+			
+			var tbody_lefts = this.querySelectorAll('.tbody_left');
+			for(var i = 0; i < tbody_lefts.length; i++) {
+				tbody_lefts[i].style.transform = 'translateX(' + scrollLeft + 'px)';
+			}
+		
+			var thead_top_lefts = this.querySelectorAll('.thead_top_left');
+			for(var i = 0; i < thead_top_lefts.length; i++) {
+				thead_top_lefts[i].style.transform = 'translate(' + scrollLeft + 'px, 0px)';
+			}
+        }
+
+        tableCont.addEventListener('scroll', scrollHandle);
+    }
+</script>

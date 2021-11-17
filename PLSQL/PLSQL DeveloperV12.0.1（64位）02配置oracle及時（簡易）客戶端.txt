@@ -1,0 +1,5 @@
+打开已经安装好的plsql，打开：菜单栏–>Tools–>Preferences 
+在第一个选项：Connection中： 
+（1）、将Check connection打上勾 
+（2）、在Oracle Home(empty is autodetect)中填上你的instantclient的地址（比如我的是D:\oracle_instantclient_32\instantclient_11_2） 
+（3）、在OCI library(empty is autodetect)中填上你的instantclient中的oci.dll文件的地址（比如我的是D:\oracle_instantclient_32\instantclient_11_2\oci.dll）

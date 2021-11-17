@@ -1,0 +1,16 @@
+select t.flow_state,
+       concat(a.person_name, concat('\n', t.flow_now_man)) flow_now_man
+  from FL_PARTFPROCESS t, account_broken a
+ where t.flow_now_man = a.account_name
+   and t.p_id = ?
+   
+concat(a,b)只能有兩個參數，想要實現多個連接，需要進行嵌套
+
+常用連接實例：
+查詢人員
+concat(concat(a.person_name, concat('(', t.creator)),')') creator_name
+
+select t.*,
+       concat(concat(a.person_name, concat('(', t.creator)), ')') creator_name
+  from MD_NEW_MOULD_FILE t, ACCOUNT_BROKEN a
+ where t.creator = a.account_name

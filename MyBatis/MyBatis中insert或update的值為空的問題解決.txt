@@ -1,0 +1,6 @@
+在MyBatis配置文件中配置以下內容
+<configuration>
+  <settings>
+  	<setting name="jdbcTypeForNull" value="NULL"/>
+  </settings>
+</configuration>
